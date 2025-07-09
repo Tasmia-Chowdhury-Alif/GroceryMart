@@ -3,6 +3,8 @@
     python-dotenv (for .env file)
     djangorestframework
     pytest
+    black (Python formatter keeping it indivigual)
+    django-mptt ( to implement eficient query for Nested Relations)
 
 
 # Commands
@@ -19,3 +21,5 @@ pip install python-dotenv
 pip install djangorestframework
 
 pip install pytest
+
+pip install django-mptt
