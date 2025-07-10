@@ -5,6 +5,8 @@
     pytest
     black (Python formatter keeping it indivigual)
     django-mptt ( to implement eficient query for Nested Relations)
+    djangorestframework-simplejwt ( for JWT Authentication )
+
 
 
 # Commands
@@ -23,3 +25,5 @@ pip install djangorestframework
 pip install pytest
 
 pip install django-mptt
+
+pip install djangorestframework-simplejwt
