@@ -30,4 +30,5 @@ router.register("categories", CategoryViewSet)
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include(router.urls)),
+    path("accounts/", include('accounts.urls')),
 ]
