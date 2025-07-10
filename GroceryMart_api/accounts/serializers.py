@@ -46,24 +46,3 @@ class RegistrationSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
-    def save(self):
-        username = self.validated_data["username"]
-        first_name = self.validated_data["first_name"]
-        last_name = self.validated_data["last_name"]
-        email = self.validated_data["email"]
-        password1 = self.validated_data["password"]
-        confirm_password = self.validated_data["confirm_password"]
-
-        if password1 != confirm_password:
-            raise serializers.ValidationError({"error": "Password Doesn't match"})
-        elif User.objects.filter(email=email).exists():
-            raise serializers.ValidationError({"error": "Email Already exists"})
-
-        user = User(
-            username=username, first_name=first_name, last_name=last_name, email=email
-        )
-        print(user)
-        user.set_password(password1)
-        user.is_active = False
-        user.save()
-        return user
