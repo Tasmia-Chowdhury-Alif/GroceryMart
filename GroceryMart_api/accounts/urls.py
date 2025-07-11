@@ -11,8 +11,12 @@ from . import views
 # router.register()
 
 urlpatterns = [
-    path("registration/", views.RegistrationViewSet.as_view(), name="registration"),
-    path("activate/<uid64>/<token>/", views.activate),
-    path("token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
-    path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    # old endpoints
+    # path("registration/", views.RegistrationViewSet.as_view(), name="registration"),
+    # path("activate/<uid64>/<token>/", views.activate),
+    # path("token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    # path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+
+    path('', views.activate_user, name='activate'),
+
 ]

@@ -1,14 +1,16 @@
-<div >
-  <h2 >
-    ✅ Varify Your Account
-  </h2>
-  <h5>
-    Thanks for creating an account on our platform.
-  </h5>
-  <p>click the link below to varify your account </p>
-
-  <p>
-    Varification Link : <a href="{{confirm_link}}" target="_blank">{{confirm_link}}</a>
-  </p>
-  
-</div>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Activate your GroceryMart account</title>
+</head>
+<body>
+    <h2>Hello {{ user.username }},</h2>
+    <p>Thank you for registering with <strong>GroceryMart</strong>!</p>
+    <p>Please click the link below to activate your account:</p>
+    <p><a href="{{ activation_url }}">{{ activation_url }}</a></p>
+    <p>If you did not register, you can safely ignore this email.</p>
+    <br>
+    <p>— GroceryMart Team</p>
+</body>
+</html>

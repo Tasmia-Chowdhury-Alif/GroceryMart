@@ -6,6 +6,8 @@
     black (Python formatter keeping it indivigual)
     django-mptt ( to implement eficient query for Nested Relations)
     djangorestframework-simplejwt ( for JWT Authentication )
+    djoser ( JWT login Logout password reset )
+    django-cors-headers ( for Cros Origine Requests )
 
 
 
@@ -27,3 +29,7 @@ pip install pytest
 pip install django-mptt
 
 pip install djangorestframework-simplejwt
+
+pip install djoser
+
+pip install django-cors-headers

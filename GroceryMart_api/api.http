@@ -1,0 +1,87 @@
+# ✅ Register New User
+POST http://127.0.0.1:8000/auth/users/ HTTP/1.1
+Content-Type: application/json
+
+{
+  "username": "alif7312",
+  "first_name": "Tasmia",
+  "last_name": "Chowdhury",
+  "email": "tasmiachowdhuryalif222@gmail.com",
+  "password": "1@45!alif",
+  "re_password": "1@45!alif"
+}
+
+###
+# ✅ Activate User (Use UID + Token from email in terminal)
+POST http://127.0.0.1:8000/auth/users/activation/
+Content-Type: application/json
+
+{
+  "uid": "Mg",              // ← Replace this with actual UID from link
+  "token": "5rq-79c91f..."  // ← Replace this with actual token from link
+}
+
+###
+# ✅ Login (JWT Token)
+POST http://127.0.0.1:8000/auth/jwt/create/
+Content-Type: application/json
+
+{
+  "username": "alif7312",
+  "password": "1@45!alif"
+}
+
+###
+# ✅ Refresh Token
+POST http://127.0.0.1:8000/auth/jwt/refresh/
+Content-Type: application/json
+
+{
+  "refresh": "PASTE_YOUR_REFRESH_TOKEN_HERE"
+}
+
+###
+# ✅ Get Current User Info
+GET http://127.0.0.1:8000/auth/users/me/
+Authorization: Bearer PASTE_YOUR_ACCESS_TOKEN_HERE
+
+###
+# ✅ Change Password While Logged In
+POST http://127.0.0.1:8000/auth/users/set_password/
+Authorization: Bearer PASTE_YOUR_ACCESS_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "current_password": "Test@1234",
+  "new_password": "NewPass@123"
+}
+
+###
+# ✅ Request Password Reset Email
+POST http://127.0.0.1:8000/auth/users/reset_password/
+Content-Type: application/json
+
+{
+  "email": "tasmia@example.com"
+}
+
+###
+# ✅ Confirm Password Reset (from link in email)
+POST http://127.0.0.1:8000/auth/users/reset_password_confirm/
+Content-Type: application/json
+
+{
+  "uid": "Mg",              // ← Replace this with actual UID
+  "token": "abc123",        // ← Replace this with token
+  "new_password": "NewPass@123"
+}
+
+###
+# ✅ Logout (Blacklist refresh token)
+POST http://127.0.0.1:8000/auth/jwt/logout/
+Content-Type: application/json
+Authorization: Bearer PASTE_YOUR_ACCESS_TOKEN_HERE
+
+{
+  "refresh": "PASTE_YOUR_REFRESH_TOKEN_HERE"
+}
