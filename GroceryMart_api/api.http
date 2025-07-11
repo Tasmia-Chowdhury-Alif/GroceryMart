@@ -3,7 +3,7 @@ POST http://127.0.0.1:8000/auth/users/ HTTP/1.1
 Content-Type: application/json
 
 {
-  "username": "alif7312",
+  "username": "alif7712",
   "first_name": "Tasmia",
   "last_name": "Chowdhury",
   "email": "tasmiachowdhuryalif222@gmail.com",
@@ -17,8 +17,8 @@ POST http://127.0.0.1:8000/auth/users/activation/
 Content-Type: application/json
 
 {
-  "uid": "Mg",              // ← Replace this with actual UID from link
-  "token": "5rq-79c91f..."  // ← Replace this with actual token from link
+  "uid": "NTQ",
+  "token": "cssswv-db16057d3d4b47fdbaa398f5a85dad41"
 }
 
 ###
@@ -27,9 +27,12 @@ POST http://127.0.0.1:8000/auth/jwt/create/
 Content-Type: application/json
 
 {
-  "username": "alif7312",
+  "username": "alif7712",
   "password": "1@45!alif"
 }
+
+  # "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc1MjMzOTI0NywiaWF0IjoxNzUyMjUyODQ3LCJqdGkiOiJlOTYzOTI1YmQ4OWE0NTQ1OTdkYmM0MTk5MDQyZWY4YyIsInVzZXJfaWQiOjU0fQ.DUNLWlBm2cm87xrmmLCRqIftyvtfiYgr8OJHANbgP-A",
+  # "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUyMjUzMTQ3LCJpYXQiOjE3NTIyNTI4NDcsImp0aSI6ImMzNzI0YWEyYzc4ZjQyYzg4YjM1YzI4N2MyMGYxNjE3IiwidXNlcl9pZCI6NTR9.qbMjB6Z0nQyEL6egXcQfMn66F-ekF6vYgTDxq8gEFGo"
 
 ###
 # ✅ Refresh Token
@@ -37,13 +40,13 @@ POST http://127.0.0.1:8000/auth/jwt/refresh/
 Content-Type: application/json
 
 {
-  "refresh": "PASTE_YOUR_REFRESH_TOKEN_HERE"
+  "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc1MjMzODA2NCwiaWF0IjoxNzUyMjUxNjY0LCJqdGkiOiJiNjIzNDZmOWY3NjQ0ZGY1OTFlNGE2NWEwMDEzMWI5OCIsInVzZXJfaWQiOjUwfQ._uBiaqSqHzp4aWBg2kUsGSZPznPIV0zTvlzW1cz7WJ0"
 }
 
 ###
 # ✅ Get Current User Info
 GET http://127.0.0.1:8000/auth/users/me/
-Authorization: Bearer PASTE_YOUR_ACCESS_TOKEN_HERE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUyMjUzMTQ3LCJpYXQiOjE3NTIyNTI4NDcsImp0aSI6ImMzNzI0YWEyYzc4ZjQyYzg4YjM1YzI4N2MyMGYxNjE3IiwidXNlcl9pZCI6NTR9.qbMjB6Z0nQyEL6egXcQfMn66F-ekF6vYgTDxq8gEFGo
 
 ###
 # ✅ Change Password While Logged In

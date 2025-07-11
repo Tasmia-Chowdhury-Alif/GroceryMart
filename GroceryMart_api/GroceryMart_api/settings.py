@@ -171,7 +171,7 @@ DJOSER = {
     'SEND_CONFIRMATION_EMAIL': True,
     'PASSWORD_CHANGED_EMAIL_CONFIRMATION': True,
     'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
-    'ACTIVATION_URL': 'activate/{uid}/{token}',
+    'ACTIVATION_URL': 'auth/users/activation/{uid}/{token}',
     'SERIALIZERS': {
         'user_create': 'accounts.serializers.UserCreateSerializer',
         'user': 'accounts.serializers.UserSerializer',
@@ -185,29 +185,10 @@ DJOSER = {
     },
     'TEMPLATES': {
         'activation': 'email/activation.html',
-        'confirmation': 'email/confirmation_email.html',
-        'password_reset': 'email/password_reset_email.html',
-        'password_changed_confirmation': 'email/password_changed_confirmation_email.html',
+        'confirmation': 'email/confirmation.html',
+        'password_reset': 'email/password_reset.html',
+        'password_changed_confirmation': 'email/password_changed_confirmation.html',
     },
 }
 
-
-# Logging configuration
-import logging
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'loggers': {
-        'djoser': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-        },
-    },
-}
 

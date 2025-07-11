@@ -14,7 +14,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("auth/", include("djoser.urls")),  # /auth/users/, /auth/users/me/
     path("auth/", include("djoser.urls.jwt")),  # /auth/jwt/create/, etc.
-    path("activate/<str:uid>/<str:token>/", include("accounts.urls")), # custom activation endpoint
     path("accounts/", include("accounts.urls")),
     path("categories/", include(router.urls)),
 ]

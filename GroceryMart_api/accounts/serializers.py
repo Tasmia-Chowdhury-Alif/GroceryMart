@@ -33,7 +33,7 @@ class UserCreateSerializer(BaseUserCreateSerializer):
 
         if data["password"] != data["re_password"]:
             raise serializers.ValidationError("Passwords do not match.")
-        
+
         # if User.objects.filter(email=email).exists():
         #     raise serializers.ValidationError("Email already exists.")
 
@@ -41,7 +41,12 @@ class UserCreateSerializer(BaseUserCreateSerializer):
 
     def create(self, validated_data):
         validated_data.pop("re_password")
-        return super().create(validated_data)
+        print("Creating user with:", validated_data)
+        user = User.objects.create_user(**validated_data)
+        print("Saved user first_name:", user.first_name)
+        print("Saved user last_name:", user.last_name)
+        
+        return user
 
 
 class UserSerializer(BaseUserSerializer):
