@@ -20,7 +20,7 @@ env/
 *.pot
 *.pyc
 
-.http
+api.http
 *.http
 
 
