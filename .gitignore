@@ -20,6 +20,10 @@ env/
 *.pot
 *.pyc
 
+.http
+*.http
+
+
 # VS Code
 .vscode/
 
