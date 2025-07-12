@@ -9,42 +9,33 @@ from rest_framework import serializers
 
 
 class UserCreateSerializer(BaseUserCreateSerializer):
-    confirm_password = serializers.CharField(required=True)
-
+    # Explicitly define re_password as a write-only field
+    re_password = serializers.CharField(write_only=True)
+    
     class Meta(BaseUserCreateSerializer.Meta):
         model = User
-        fields = [
-            "id",
-            "username",
-            "first_name",
-            "last_name",
-            "email",
-            "password",
-            "re_password",
-        ]
-        extra_kwargs = {
-            "password": {"write_only": True},
-            "re_password": {"write_only": True},
-        }
+        fields = BaseUserCreateSerializer.Meta.fields + ('first_name', 'last_name')
 
     def validate(self, data):
-        # email = data.get("email", "").lower()
-        # data["email"] = email  # Normalizeing the email
+        # Call parent validation first
+        data = super().validate(data)
 
-        if data["password"] != data["re_password"]:
-            raise serializers.ValidationError("Passwords do not match.")
-
-        # if User.objects.filter(email=email).exists():
-        #     raise serializers.ValidationError("Email already exists.")
+        # Add custom validation if needed
+        # if data["password"] != data["re_password"]:
+        #     raise serializers.ValidationError("Passwords do not match.")
 
         return data
 
     def create(self, validated_data):
-        validated_data.pop("re_password")
-        print("Creating user with:", validated_data)
-        user = User.objects.create_user(**validated_data)
-        print("Saved user first_name:", user.first_name)
-        print("Saved user last_name:", user.last_name)
+        # Debug: Print what we're receiving
+        print("DEBUG - validated_data:", validated_data)
+        
+        # Let the parent class handle the creation
+        # This ensures Djoser's logic is preserved
+        user = super().create(validated_data)
+        
+        # Debug: Print created user
+        print("DEBUG - Created user:", user.username, user.first_name, user.last_name)
         
         return user
 
