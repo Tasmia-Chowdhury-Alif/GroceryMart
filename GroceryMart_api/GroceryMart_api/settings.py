@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     # External Packages
     "rest_framework",
     'rest_framework_simplejwt.token_blacklist',
+    'djoser',
     
     # Internal Apps
     "product",
@@ -172,11 +173,11 @@ DJOSER = {
     'PASSWORD_CHANGED_EMAIL_CONFIRMATION': True,
     'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
     'ACTIVATION_URL': 'auth/users/activation/{uid}/{token}',
-    'SERIALIZERS': {
-        'user_create': 'accounts.serializers.UserCreateSerializer',
-        'user': 'accounts.serializers.UserSerializer',
-        'current_user': 'accounts.serializers.UserSerializer',
-    },
+    # 'SERIALIZERS': {
+    #     'user_create': 'accounts.serializers.UserCreateSerializer',
+    #     'user': 'accounts.serializers.UserSerializer',
+    #     'current_user': 'accounts.serializers.UserSerializer',
+    # },
     'EMAIL': {
         'activation': 'djoser.email.ActivationEmail',
         'confirmation': 'djoser.email.ConfirmationEmail',
