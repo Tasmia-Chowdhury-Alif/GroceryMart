@@ -1,10 +1,10 @@
-# from django.shortcuts import render
-# from django.contrib.auth.models import User
+from django.shortcuts import render
+from django.contrib.auth.models import User
 
-# from rest_framework import generics, status
-# from rest_framework.response import Response
+from rest_framework import generics, status, viewsets
+from rest_framework.response import Response
 
-# from .serializers import RegistrationSerializer
+from . import models, serializers
 
 # from django.contrib.auth.tokens import default_token_generator
 # from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -59,3 +59,8 @@
 #     else:
 #         print("Invalid credentials")
 #         return redirect("registration")
+
+
+class ProfileViewset(viewsets.ModelViewSet):
+    queryset = models.Profile.objects.all()
+    serializer_class = serializers.ProfileSerializer

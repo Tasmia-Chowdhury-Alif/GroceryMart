@@ -8,6 +8,7 @@
     djangorestframework-simplejwt ( for JWT Authentication )
     djoser ( JWT login Logout password reset )
     django-cors-headers ( for Cros Origine Requests )
+    pillow ( for images )
 
 
 
@@ -33,3 +34,5 @@ pip install djangorestframework-simplejwt
 pip install djoser
 
 pip install django-cors-headers
+
+python -m pip install Pillow

@@ -1,5 +1,7 @@
 from django.contrib.auth.models import User
 
+from . import models 
+
 from djoser.serializers import (
     UserCreateSerializer as BaseUserCreateSerializer,
     UserSerializer as BaseUserSerializer,
@@ -88,3 +90,10 @@ class UserSerializer(BaseUserSerializer):
 #         user.set_password(validated_data["password"])
 #         user.save()
 #         return user
+
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Profile
+        fields = ['user', 'full_name', 'phone', 'address', 'image', 'shopping_prefs']
