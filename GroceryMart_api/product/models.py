@@ -22,12 +22,14 @@ class Brand(models.Model):
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=200)
     description = models.TextField(blank=True)
-    image = models.ImageField(upload_to='products/profile/', null=True, blank=True)
-    is_digital = models.BooleanField(default=False) # digital means does it requires delevery 
+    price = models.DecimalField(max_digits= 12, decimal_places= 2)
+    stock = models.PositiveIntegerField()
+    image = models.ImageField(upload_to='products/', null=True, blank=True)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     category = TreeForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
+    is_digital = models.BooleanField(default=False) # digital means does it requires delevery 
     
     def __str__(self):
         return self.name
