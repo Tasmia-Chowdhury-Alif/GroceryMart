@@ -37,6 +37,9 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
+    #External package 
+    "mptt", # for MPTTModelAdmin
+
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
