@@ -8,8 +8,8 @@ from . import views
 router = DefaultRouter()
 
 router.register("categories", views.CategoryViewSet)
-router.register("brand", views.BrandViewSet)
-router.register("product", views.ProductViewSet)
+router.register("brands", views.BrandViewSet)
+router.register("products", views.ProductViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),
