@@ -39,6 +39,7 @@ ALLOWED_HOSTS = ["*"]
 INSTALLED_APPS = [
     #External package 
     "mptt", # for MPTTModelAdmin
+    'django_filters', # for filtering
 
     "django.contrib.admin",
     "django.contrib.auth",
@@ -159,6 +160,14 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,  # products per page
+    'DEFAULT_FILTER_BACKENDS': [
+        'rest_framework.filters.SearchFilter',
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.OrderingFilter',
+    ],
+
 }
 
 
