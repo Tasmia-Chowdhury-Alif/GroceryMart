@@ -9,6 +9,7 @@
     djoser ( JWT login Logout password reset )
     django-cors-headers ( for Cros Origine Requests )
     pillow ( for images )
+    django_filters ( for filtering )
 
 
 
@@ -36,3 +37,5 @@ pip install djoser
 pip install django-cors-headers
 
 python -m pip install Pillow
+
+pip install django-filter
