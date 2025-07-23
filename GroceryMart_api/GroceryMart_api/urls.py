@@ -12,6 +12,7 @@ urlpatterns = [
     path("auth/", include("djoser.urls.jwt")),  # /auth/jwt/create/, etc.
     path("accounts/", include("accounts.urls")),
     path("products/", include("product.urls")),
+    path("cart/", include("cart.urls")), 
 ]
 
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
