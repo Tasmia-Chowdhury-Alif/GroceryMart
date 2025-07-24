@@ -20,9 +20,12 @@ class CartItemSerializer(serializers.ModelSerializer):
         model = CartItem
         fields = ["id", "product", "product_id", "quantity"]
 
+
 """
 CartItemQuantitySerializer is used to update Item Quantity in a Cart  
 """
+
+
 # serializers.py
 class CartItemQuantitySerializer(serializers.ModelSerializer):
     class Meta:
@@ -42,8 +45,12 @@ the items field is to show all the item the cart is containing.
 
 class CartSerializer(serializers.ModelSerializer):
     items = CartItemSerializer(many=True, read_only=True)
+    total = serializers.SerializerMethodField()
+
+    def get_total(self, obj):
+        return obj.total
 
     class Meta:
         model = Cart
-        fields = ["id", "user", "created_at", "items"]
-        read_only_fields = ["user"]
+        fields = ["id", "user", "created_at", "items", "total"]
+        read_only_fields = ["user", "total"]
