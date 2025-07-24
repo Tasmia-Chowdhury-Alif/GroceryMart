@@ -7,6 +7,11 @@ class Cart(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="cart")
     created_at = models.DateTimeField(auto_now_add=True)
 
+    @property
+    def total(self):
+        return sum(item.product.price * item.quantity for item in self.items.all())
+
+
     def __str__(self):
         return f"{self.user.username}'s Cart"
 
