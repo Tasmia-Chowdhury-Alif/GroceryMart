@@ -25,11 +25,12 @@ class CartViewSet(viewsets.ViewSet):
 
         if serializer.is_valid():
             product = serializer.validated_data['product']
-            quantity = serializer.validated_data['quantity']
+            # quantity = serializer.validated_data['quantity']
 
-            item, created = CartItem.objects.get_or_create(cart= cart, product=product, quantity=quantity)
-            if not created:
-                item.quantity += quantity
+            # item, created = CartItem.objects.get_or_create(cart= cart, product=product, quantity=quantity)
+            item, created = CartItem.objects.get_or_create(cart= cart, product=product)
+            # if not created:
+            #     item.quantity += quantity
 
             item.save()
             return Response({"message" : "Item added to cart"}, status= status.HTTP_201_CREATED)
