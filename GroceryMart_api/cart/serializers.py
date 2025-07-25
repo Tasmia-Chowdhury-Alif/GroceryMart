@@ -26,7 +26,6 @@ CartItemQuantitySerializer is used to update Item Quantity in a Cart
 """
 
 
-# serializers.py
 class CartItemQuantitySerializer(serializers.ModelSerializer):
     class Meta:
         model = CartItem
@@ -35,6 +34,10 @@ class CartItemQuantitySerializer(serializers.ModelSerializer):
     def validate_quantity(self, value):
         if value < 0:
             raise serializers.ValidationError("Quantity cannot be negative.")
+
+        if value > self.instance.product.stock:
+            raise serializers.ValidationError("Not enough stock available.")
+        
         return value
 
 
