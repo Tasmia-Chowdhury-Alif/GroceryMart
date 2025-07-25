@@ -9,6 +9,10 @@ from rest_framework.permissions import IsAuthenticated
 from cart.models import Cart, CartItem
 from .models import Order, OrderItem
 from .serializers import OrderSerializer
+from product.models import Product
+
+from django.db import transaction
+from django.db.models import F
 
 
 # List all orders History for the logged-in user
@@ -34,6 +38,7 @@ class OrderDetailView(RetrieveAPIView):
 class CheckoutView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @transaction.atomic
     def post(self, request):
         cart = Cart.objects.filter(user=request.user).first()
         if not cart or not cart.items.exists():
@@ -41,7 +46,7 @@ class CheckoutView(APIView):
                 {"message": "Cart is empty"}, status=status.HTTP_400_BAD_REQUEST
             )
 
-        total = sum(item.product.price * item.quantity for item in cart.items.all())
+        total = cart.total
 
         if request.user.profile.balance < total:
             return Response(
@@ -49,23 +54,48 @@ class CheckoutView(APIView):
                 status=status.HTTP_402_PAYMENT_REQUIRED,
             )
 
-        # Deduct balance
+
+        # Lock all products in cart
+        product_ids = [item.product.id for item in cart.items.all()]
+        products = Product.objects.select_for_update().filter(id__in=product_ids)
+        product_map = {p.id: p for p in products}
+
+        # Checking product stock  
+        for item in cart.items.all():
+            product = product_map[item.product.id]
+            if item.quantity > product.stock:
+                return Response(
+                    {"message": f"Only {product.stock} units of {product.name} is Available"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+        # Deducting the users balance
         request.user.profile.balance -= total
         request.user.profile.save()
 
-        # Create order
+        # Creating order
         order = Order.objects.create(user=request.user, total=total, status="paid")
 
         for item in cart.items.all():
+            product = product_map[item.product.id]
             OrderItem.objects.create(
                 order=order,
-                product=item.product,
+                product=product,
                 quantity=item.quantity,
-                price=item.product.price,
+                price=product.price,
             )
+
+            # Reducing the product's stock
+            Product.objects.filter(id=product.id).update(stock=F('stock') - item.quantity)
+
+
+        # cleared the cart
         cart.items.all().delete()
 
+
         # TODO: Celery task will be triggered here
+
+
         return Response(
             {"message": "Order placed successfully"}, status=status.HTTP_201_CREATED
         )
