@@ -10,7 +10,7 @@
     django-cors-headers ( for Cros Origine Requests )
     pillow ( for images )
     django_filters ( for filtering )
-
+    sslcommerz-lib  
 
 
 # Commands
@@ -39,3 +39,5 @@ pip install django-cors-headers
 python -m pip install Pillow
 
 pip install django-filter
+
+pip install sslcommerz-lib
