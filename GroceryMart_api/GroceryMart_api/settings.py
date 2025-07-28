@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     "cart",
     "wishlist",
     "orders",
+    "payments",
 ]
 
 MIDDLEWARE = [
@@ -157,6 +158,11 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+SSLC_STORE_ID = os.environ.get("SSLC_Store_ID")
+SSLC_STORE_PASS = os.environ.get("SSLC_Store_Password")
+SSLC_IS_SANDBOX = True  # false when live
 
 
 REST_FRAMEWORK = {
