@@ -33,6 +33,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://sandbox.sslcommerz.com",
+    "https://securepay.sslcommerz.com",
+]
+
 
 # Application definition
 
