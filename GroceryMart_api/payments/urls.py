@@ -1,9 +1,10 @@
 from django.urls import path
-from .views import PaymentInitAPIView, IPNView, payment_success, payment_fail, payment_cancel
+from .views import PaymentInitAPIView, IPNView, StripeWebhookView, payment_success, payment_fail, payment_cancel
 
 urlpatterns = [
     path('init/', PaymentInitAPIView.as_view(), name='payment-init'),
-    path('ipn/', IPNView.as_view(), name='payment-ipn'),
+    path('ipn/', IPNView.as_view(), name='sslcommerz-ipn'),
+    path('stripe-webhook/', StripeWebhookView.as_view(), name='stripe-webhook'),
     path('success/', payment_success, name='payment-success'),
     path('fail/', payment_fail, name='payment-fail'),
     path('cancel/', payment_cancel, name='payment-cancel'),
