@@ -11,6 +11,9 @@
     pillow ( for images )
     django_filters ( for filtering )
     sslcommerz-lib  
+    stripe
+    responses ( for testing in test.py )
+    Stripe.StripeCLI ( for testing stripe webhook )
 
 
 # Commands
@@ -41,3 +44,9 @@ python -m pip install Pillow
 pip install django-filter
 
 pip install sslcommerz-lib
+
+pip install stripe
+
+pip install responses
+
+winget install Stripe.StripeCLI (in powershell)
