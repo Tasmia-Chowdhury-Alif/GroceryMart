@@ -143,7 +143,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [
-    BASE_DIR / 'static',
+    # BASE_DIR / 'static',
 ]
 
 MEDIA_URL = '/media/'
@@ -165,9 +165,15 @@ EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
+# SSLCommerz Configuration
 SSLC_STORE_ID = os.environ.get("SSLC_Store_ID")
 SSLC_STORE_PASS = os.environ.get("SSLC_Store_Password")
 SSLC_IS_SANDBOX = True  # false when live
+
+# Stripe Configuration
+STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY")
+STRIPE_PUBLISHABLE_KEY = os.environ.get("STRIPE_PUBLISHABLE_KEY")
+STRIPE_WEBHOOK_SECRET = os.environ.get("STRIPE_WEBHOOK_SECRET")
 
 
 REST_FRAMEWORK = {
