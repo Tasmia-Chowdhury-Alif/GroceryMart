@@ -34,6 +34,7 @@ DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
 CSRF_TRUSTED_ORIGINS = [
+    "https://grocerymart-jk59.onrender.com",
     "https://sandbox.sslcommerz.com",
     "https://securepay.sslcommerz.com",
 ]
@@ -226,3 +227,25 @@ DJOSER = {
         "password_changed_confirmation": "email/password_changed_confirmation.html",
     },
 }
+
+
+# terminal logging settings 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log',
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
+
