@@ -111,6 +111,7 @@ class IPNView(APIView):
     permission_classes = []
 
     def post(self, request):
+        logger.info(f"SSLCOMMERZ IPN received: {request.data}")
         gateway = SSLCOMMERZGateway()
         success, error = gateway.validate_payment(request.data)
         if not success:
@@ -119,6 +120,9 @@ class IPNView(APIView):
 
         try:
             order = Order.objects.get(id=request.data.get("tran_id"))
+            if order.status == "paid":
+                logger.info(f"Order {order.id} already processed")
+                return Response({"status": "ok"}, status=status.HTTP_200_OK)
             cart = Cart.objects.get(user=order.user)
             gateway.process_order(cart, order)
             logger.info(f"Order {order.id} processed successfully via SSLCOMMERZ")
