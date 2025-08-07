@@ -5,16 +5,17 @@ from rest_framework import status
 
 class SSLCOMMERZGateway(PaymentGateway):
     def initiate_payment(self, request, cart, order):
+        base_url = getattr(settings, "BASE_URL", "https://grocerymart-jk59.onrender.com")
+        
         payload = {
             "store_id": settings.SSLC_STORE_ID,
             "store_passwd": settings.SSLC_STORE_PASS,
             "total_amount": cart.total,
             "currency": "BDT",
-            "tran_id": str(order.id),
-            "success_url": request.build_absolute_uri("/payments/success/"),
-            "fail_url": request.build_absolute_uri("/payments/fail/"),
-            "cancel_url": request.build_absolute_uri("/payments/cancel/"),
-            "ipn_url": request.build_absolute_uri("/payments/ipn/"),
+            "tran_id": str(order.id),"success_url": f"{base_url}/payments/success/",
+            "fail_url": f"{base_url}/payments/fail/",
+            "cancel_url": f"{base_url}/payments/cancel/",
+            "ipn_url": f"{base_url}/payments/ipn/",
             "cus_name": request.user.get_full_name() or "Unknown",
             "cus_email": request.user.email,
             "cus_phone": request.user.profile.phone,
