@@ -6,6 +6,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 # Hosted Stripe gateway
 class StripeGateway(PaymentGateway):
     def __init__(self):
@@ -13,10 +14,10 @@ class StripeGateway(PaymentGateway):
 
     def initiate_payment(self, request, cart, order):
         try:
-            currency = getattr(settings, 'STRIPE_CURRENCY', 'usd')
+            currency = getattr(settings, "STRIPE_CURRENCY", "usd")
             session = stripe.checkout.Session.create(
                 payment_method_types=["card"],
-                line_items = [
+                line_items=[
                     {
                         "price_data": {
                             "currency": currency,
@@ -24,7 +25,8 @@ class StripeGateway(PaymentGateway):
                             "unit_amount": int(item.product.price * 100),
                         },
                         "quantity": item.quantity,
-                    } for item in cart.items.all()
+                    }
+                    for item in cart.items.all()
                 ],
                 mode="payment",
                 success_url=f"{settings.BASE_URL}/payments/success/?session_id={{CHECKOUT_SESSION_ID}}",
