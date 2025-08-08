@@ -1,17 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Payment Success</title>
 </head>
-
 <body>
-
-    <h1>You have completed Payment successfully</h1>
-
-
+    <h1>Payment Successful</h1>
+    {% if tran_id %}
+        <p>Order ID: {{ tran_id }}</p>
+        <p>Order Status: {{ order_status|default:"Processing" }}</p>
+        {% if error %}
+            <p style="color: red;">Error: {{ error }}</p>
+        {% endif %}
+    {% else %}
+        <p>No order information available.</p>
+    {% endif %}
+    <a href="{% url 'order_history' %}">View Order History</a>
 </body>
-
 </html>
