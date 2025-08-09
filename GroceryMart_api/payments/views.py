@@ -57,7 +57,7 @@ class PaymentInitAPIView(APIView):
             # payment gateway
             PAYMENT_GATEWAYS = {
                 "sslcommerz": SSLCOMMERZGateway,
-                "stripe": StripeGateway, # hosted stripe gateway
+                "stripe": StripeGateway,  # hosted stripe gateway
                 "stripe_custom": StripeCustomGateway,
             }
 
@@ -136,30 +136,34 @@ class StripeWebhookView(APIView):
 
         try:
             event = stripe.Webhook.construct_event(payload, sig_header, endpoint_secret)
-        except ValueError:
-            logger.error("Invalid Stripe webhook payload")
+        except ValueError as e:
+            logger.error(f"Invalid Stripe webhook payload: {str(e)}")
             return Response(
                 {"status": "invalid payload"}, status=status.HTTP_400_BAD_REQUEST
             )
-        except stripe.error.SignatureVerificationError:
+        except stripe.error.SignatureVerificationError as e:
+            logger.error(f"Invalid Stripe webhook signature: {str(e)}")
             return Response(
                 {"status": "Invalid Stripe webhook signature"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        # checking if the request is Stripe Custom Gateway
         if event["type"] == "payment_intent.succeeded":
             payment_intent = event["data"]["object"]
             order_id = payment_intent["metadata"].get("order_id")
             try:
                 order = Order.objects.get(id=order_id)
                 cart = Cart.objects.get(user=order.user)
-                gateway = StripeGateway()
+                gateway = StripeCustomGateway()
                 success, error = gateway.validate_payment(
                     {"payment_intent_id": payment_intent["id"]}
                 )
                 if success:
                     gateway.process_order(cart, order)
-                    logger.info(f"Order {order_id} processed successfully via Stripe")
+                    logger.info(
+                        f"Order {order_id} processed successfully via Stripe Custom gateway"
+                    )
                     return Response({"status": "ok"}, status=status.HTTP_200_OK)
                 logger.error(
                     f"Stripe payment validation failed for order {order_id}: {error}"
@@ -170,6 +174,14 @@ class StripeWebhookView(APIView):
                 return Response(
                     {"status": "order not found"}, status=status.HTTP_404_NOT_FOUND
                 )
+            except Exception as e:
+                logger.error(f"Error processing payment intent {order_id}: {str(e)}")
+                return Response(
+                    {"status": f"processing error: {str(e)}"},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                )
+
+        # checking if the request is Stripe Hosted Gateway
         elif event["type"] == "checkout.session.completed":
             session = event["data"]["object"]
             if session.payment_status == "paid":
@@ -177,13 +189,36 @@ class StripeWebhookView(APIView):
                 try:
                     order = Order.objects.get(id=order_id)
                     cart = Cart.objects.get(user=order.user)
-                    PaymentGateway.process_order(cart, order)
-                    logger.info(f"Order {order_id} processed successfully via Stripe Hosted")
-                    return Response({"status": "ok"}, status=status.HTTP_200_OK)
+                    gateway = StripeGateway()
+                    success, error = gateway.validate_payment(
+                        {"session_id": session.id}
+                    )
+                    if success:
+                        gateway.process_order(cart, order)
+                        logger.info(
+                            f"Order {order_id} processed successfully via Stripe Hosted"
+                        )
+                        return Response({"status": "ok"}, status=status.HTTP_200_OK)
+                    logger.error(
+                        f"Stripe hosted validation failed for order {order_id}: {error}"
+                    )
+                    return Response(
+                        {"status": error}, status=status.HTTP_400_BAD_REQUEST
+                    )
                 except Order.DoesNotExist:
-                    logger.error(f"Order {order_id} not found for Stripe Hosted webhook")
+                    logger.error(
+                        f"Order {order_id} not found for Stripe Hosted webhook"
+                    )
                     return Response(
                         {"status": "order not found"}, status=status.HTTP_404_NOT_FOUND
+                    )
+                except Exception as e:
+                    logger.error(
+                        f"Error processing checkout session {order_id}: {str(e)}"
+                    )
+                    return Response(
+                        {"status": f"processing error: {str(e)}"},
+                        status=status.HTTP_500_INTERNAL_SERVER_ERROR,
                     )
 
         logger.info(f"Unhandled Stripe event: {event['type']}")
@@ -204,7 +239,9 @@ def payment_success(request):
             context["session_id"] = session_id
             if order.status != "paid":
                 context["error"] = "Payment not fully processed."
-                logger.warning(f"Order {order_id} on success page but status is {order.status}")
+                logger.warning(
+                    f"Order {order_id} on success page but status is {order.status}"
+                )
         except Order.DoesNotExist:
             context["error"] = "Order not found."
             logger.error(f"Order for session {session_id} not found on success page")
@@ -217,7 +254,9 @@ def payment_success(request):
             context["tran_id"] = tran_id
             if order.status != "paid":
                 context["error"] = "Payment not fully processed."
-                logger.warning(f"Order {tran_id} on success page but status is {order.status}")
+                logger.warning(
+                    f"Order {tran_id} on success page but status is {order.status}"
+                )
         except Order.DoesNotExist:
             context["error"] = "Order not found."
             logger.error(f"Order {tran_id} not found on success page")
