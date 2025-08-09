@@ -4,6 +4,7 @@ from .gateway import PaymentGateway
 from rest_framework import status
 import logging
 import requests
+from decimal import Decimal
 
 logger = logging.getLogger(__name__)
 
@@ -29,9 +30,9 @@ class StripeGateway(PaymentGateway):
                 data = response.json()
                 if "rates" not in data or "BDT" not in data["rates"]:
                     raise stripe.error.StripeError("Invalid exchange rate data")
-                rate = data["rates"]["BDT"]
+                rate = Decimal(str(data["rates"]["BDT"]))
             else:
-                rate = 1  # No conversion needed (e.g., if the currency is "bdt")
+                rate = Decimal("1")  # No conversion needed (e.g., if the currency is "bdt")
 
 
             session = stripe.checkout.Session.create(
