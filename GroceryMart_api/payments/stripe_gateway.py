@@ -3,6 +3,7 @@ from django.conf import settings
 from .gateway import PaymentGateway
 from rest_framework import status
 import logging
+import requests
 
 logger = logging.getLogger(__name__)
 
@@ -14,7 +15,25 @@ class StripeGateway(PaymentGateway):
 
     def initiate_payment(self, request, cart, order):
         try:
-            currency = getattr(settings, "STRIPE_CURRENCY", "usd")
+            currency = request.data.get("currency", getattr(settings, "STRIPE_CURRENCY", "usd")).lower()
+            if currency not in ["usd", "bdt"]:
+                raise ValueError(f"Unsupported currency: {currency}. Only 'usd' and 'bdt' are allowed.")
+
+            # converts the price according to rate if the currency is USD
+            if currency.lower() == "usd":
+                # Fetching current exchange rate (1 USD = X BDT)
+                response = requests.get("https://open.exchangerate-api.com/v6/latest/USD")
+                if response.status_code != 200:
+                    logger.error(f"Failed to fetch exchange rate: {response.status_code}")
+                    raise stripe.error.StripeError("Failed to fetch exchange rate")
+                data = response.json()
+                if "rates" not in data or "BDT" not in data["rates"]:
+                    raise stripe.error.StripeError("Invalid exchange rate data")
+                rate = data["rates"]["BDT"]
+            else:
+                rate = 1  # No conversion needed (e.g., if the currency is "bdt")
+
+
             session = stripe.checkout.Session.create(
                 payment_method_types=["card"],
                 line_items=[
@@ -22,7 +41,7 @@ class StripeGateway(PaymentGateway):
                         "price_data": {
                             "currency": currency,
                             "product_data": {"name": item.product.name},
-                            "unit_amount": int(item.product.price * 100),
+                            "unit_amount": int((item.product.price / rate) * 100),
                         },
                         "quantity": item.quantity,
                     }
