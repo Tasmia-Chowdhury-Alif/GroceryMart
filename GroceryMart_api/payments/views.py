@@ -234,6 +234,13 @@ def payment_success(request):
         try:
             session = stripe.checkout.Session.retrieve(session_id)
             order_id = session.metadata.get("order_id")
+            if order_id:
+                context["tran_id"] = order_id
+            else:
+                context["error"] = "No order_id in session metadata."
+                logger.warning(f"No order_id in session {session_id}")
+                return render(request, "payments/success.html", context)
+            
             order = Order.objects.get(id=order_id)
             context["order_status"] = order.status
             context["session_id"] = session_id
