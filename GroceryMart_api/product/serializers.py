@@ -29,6 +29,15 @@ class ReviewSerializer(serializers.ModelSerializer):
         if value < 1 or value > 5:
             raise serializers.ValidationError("Rating must be between 1 and 5.")
         return value
+    
+    def validate(self, data):
+        request = self.context.get('request')
+        if request and request.method == 'POST':
+            user = request.user
+            product = data.get('product')
+            if Review.objects.filter(user=user, product=product).exists():
+                raise serializers.ValidationError("You have already reviewed this product.")
+        return data
 
 
 class ProductSerializer(serializers.ModelSerializer):

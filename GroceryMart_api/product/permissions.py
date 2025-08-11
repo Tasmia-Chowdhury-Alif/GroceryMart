@@ -17,5 +17,5 @@ class IsPurchaserOrReadOnly(permissions.BasePermission):
             user = request.user
         # Check if user has purchased the product
         return Order.objects.filter(
-            user=user, orderitem__product=product, status="paid"
+            user=user, items__product=product, status="paid"
         ).exists()

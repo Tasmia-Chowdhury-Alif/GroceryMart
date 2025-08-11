@@ -65,7 +65,7 @@ class Review(models.Model):
     )  # 1-5 stars
     comment = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         unique_together = ("product", "user")  # One review per user per product
