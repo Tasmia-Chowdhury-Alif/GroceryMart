@@ -14,6 +14,7 @@
     stripe
     responses ( for testing in test.py )
     Stripe.StripeCLI ( for testing stripe webhook )
+    drf-spectacular ( for API Documentation )
 
 
 # Commands
@@ -50,3 +51,5 @@ pip install stripe
 pip install responses
 
 winget install Stripe.StripeCLI (in powershell)
+
+pip install drf-spectacular
