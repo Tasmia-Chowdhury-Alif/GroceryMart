@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt.token_blacklist",
     "djoser",
+    'drf_spectacular',
     # Internal Apps
     "accounts",
     "product",
@@ -191,6 +192,7 @@ REST_FRAMEWORK = {
         'django_filters.rest_framework.DjangoFilterBackend',
         'rest_framework.filters.OrderingFilter',
     ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 
 }
 
@@ -229,6 +231,16 @@ DJOSER = {
         "password_reset": "email/password_reset.html",
         "password_changed_confirmation": "email/password_changed_confirmation.html",
     },
+}
+
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'GroceryMart API',
+    'DESCRIPTION': 'A Django REST Framework-based e-commerce backend for a grocery store, featuring user authentication, product management, cart, wishlist, orders, and multiple payment gateways (SSLCOMMERZ, Stripe).',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    "COMPONENT_SPLIT_REQUEST": True,
+    # OTHER SETTINGS
 }
 
 
