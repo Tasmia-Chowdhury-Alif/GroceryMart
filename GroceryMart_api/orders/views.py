@@ -14,8 +14,13 @@ from product.models import Product
 from django.db import transaction
 from django.db.models import F
 
+from drf_spectacular.utils import extend_schema, OpenApiResponse
 
-# List all orders History for the logged-in user
+
+@extend_schema(
+    summary="List user's order history", 
+    tags=["Orders"]
+)
 class OrderListAPIView(ListAPIView):
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
@@ -26,6 +31,10 @@ class OrderListAPIView(ListAPIView):
 
 
 # Retrieve a single order by ID (if it belongs to the user)
+@extend_schema(
+    summary="Retrieve order details",
+    tags=['Orders']
+)
 class OrderDetailView(RetrieveAPIView):
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
@@ -34,7 +43,11 @@ class OrderDetailView(RetrieveAPIView):
     def get_queryset(self):
         return Order.objects.filter(user=self.request.user)
 
-
+@extend_schema(
+    summary="Checkout and place order using balance",
+    responses={201: OpenApiResponse(description="Order placed successfully")},
+    tags=['Orders']
+)
 class CheckoutView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -54,18 +67,19 @@ class CheckoutView(APIView):
                 status=status.HTTP_402_PAYMENT_REQUIRED,
             )
 
-
         # Lock all products in cart
         product_ids = [item.product.id for item in cart.items.all()]
         products = Product.objects.select_for_update().filter(id__in=product_ids)
         product_map = {p.id: p for p in products}
 
-        # Checking product stock  
+        # Checking product stock
         for item in cart.items.all():
             product = product_map[item.product.id]
             if item.quantity > product.stock:
                 return Response(
-                    {"message": f"Only {product.stock} units of {product.name} is Available"},
+                    {
+                        "message": f"Only {product.stock} units of {product.name} is Available"
+                    },
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
@@ -74,7 +88,7 @@ class CheckoutView(APIView):
         request.user.profile.save()
 
         # Creating order
-        order = Order.objects.create(user=request.user, total=total, status="paid")
+        order = Order.objects.create(user=request.user, total=total, status="paid", payment_method='balance')
 
         for item in cart.items.all():
             product = product_map[item.product.id]
@@ -86,15 +100,14 @@ class CheckoutView(APIView):
             )
 
             # Reducing the product's stock
-            Product.objects.filter(id=product.id).update(stock=F('stock') - item.quantity)
-
+            Product.objects.filter(id=product.id).update(
+                stock=F("stock") - item.quantity
+            )
 
         # cleared the cart
         cart.items.all().delete()
 
-
         # TODO: Celery task will be triggered here
-
 
         return Response(
             {"message": "Order placed successfully"}, status=status.HTTP_201_CREATED
