@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 
 # Hosted Stripe gateway
 class StripeGateway(PaymentGateway):
+    """Hosted Stripe checkout gateway."""
     def __init__(self):
         stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -26,11 +27,15 @@ class StripeGateway(PaymentGateway):
                 response = requests.get("https://open.exchangerate-api.com/v6/latest/USD")
                 if response.status_code != 200:
                     logger.error(f"Failed to fetch exchange rate: {response.status_code}")
-                    raise stripe.error.StripeError("Failed to fetch exchange rate")
-                data = response.json()
-                if "rates" not in data or "BDT" not in data["rates"]:
-                    raise stripe.error.StripeError("Invalid exchange rate data")
-                rate = Decimal(str(data["rates"]["BDT"]))
+                    rate = Decimal("110")  # Fallback rate 
+                    # raise stripe.error.StripeError("Failed to fetch exchange rate")
+                else:
+                    data = response.json()
+                    if "rates" not in data or "BDT" not in data["rates"]:
+                        rate = Decimal("110")  # Fallback
+                        # raise stripe.error.StripeError("Invalid exchange rate data")
+                    else:
+                        rate = Decimal(str(data["rates"]["BDT"]))
             else:
                 rate = Decimal("1")  # No conversion needed (e.g., if the currency is "bdt")
 
