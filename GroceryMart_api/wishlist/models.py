@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from product.models import Product
 
 class Wishlist(models.Model):
+    """User wishlist model."""
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="wishlist")
 
     def __str__(self):
@@ -10,6 +11,7 @@ class Wishlist(models.Model):
 
 
 class WishlistItem(models.Model):
+    """Item in a wishlist."""
     wishlist = models.ForeignKey(Wishlist, on_delete=models.CASCADE, related_name="items")
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 

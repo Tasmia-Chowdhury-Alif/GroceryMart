@@ -4,6 +4,7 @@ from .gateway import PaymentGateway
 from rest_framework import status
 
 class SSLCOMMERZGateway(PaymentGateway):
+    """Gateway for SSLCOMMERZ payments."""
     def initiate_payment(self, request, cart, order):
         base_url = getattr(settings, "BASE_URL", "https://grocerymart-jk59.onrender.com")
         

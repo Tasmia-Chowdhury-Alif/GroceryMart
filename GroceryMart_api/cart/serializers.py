@@ -11,6 +11,7 @@ and product_id is for Post requests to take only the product id as input
 
 
 class CartItemSerializer(serializers.ModelSerializer):
+    """Serializer for cart items, including product details."""
     product = ProductSerializer(read_only=True)
     product_id = serializers.PrimaryKeyRelatedField(
         queryset=Product.objects.all(), source="product", write_only=True
@@ -27,6 +28,7 @@ CartItemQuantitySerializer is used to update Item Quantity in a Cart
 
 
 class CartItemQuantitySerializer(serializers.ModelSerializer):
+    """Serializer for updating cart item quantity."""
     class Meta:
         model = CartItem
         fields = ["id", "quantity"]
@@ -47,6 +49,7 @@ the items field is to show all the item the cart is containing.
 
 
 class CartSerializer(serializers.ModelSerializer):
+    """Serializer for the entire cart, including items and total."""
     items = CartItemSerializer(many=True, read_only=True)
     total = serializers.SerializerMethodField()
 

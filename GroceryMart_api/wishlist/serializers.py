@@ -5,6 +5,7 @@ from product.models import Product
 
 
 class WishlistItemSerializer(serializers.ModelSerializer):
+    """Serializer for wishlist items."""
     product = ProductSerializer(read_only=True)
     product_id = serializers.PrimaryKeyRelatedField(
         queryset=Product.objects.all(), source="product", write_only=True
@@ -16,6 +17,7 @@ class WishlistItemSerializer(serializers.ModelSerializer):
 
 
 class WishlistSerializer(serializers.ModelSerializer):
+    """Serializer for the entire wishlist."""
     items = WishlistItemSerializer(many=True, read_only=True)
 
     class Meta:
