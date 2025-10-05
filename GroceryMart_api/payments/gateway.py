@@ -6,6 +6,7 @@ from product.models import Product
 from django.db.models import F
 
 class PaymentGateway(ABC):
+    """Abstract base class for payment gateways."""
     @abstractmethod
     def initiate_payment(self, request, cart, order):
         """Initiate a payment session and return a payment URL or session ID."""

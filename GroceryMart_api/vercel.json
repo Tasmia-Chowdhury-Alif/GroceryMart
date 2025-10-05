@@ -1,0 +1,28 @@
+{
+    "version": 2,
+    "builds": [
+        {
+            "src": "GroceryMart_api/wsgi.py",
+            "use": "@vercel/python",
+            "config": {
+                "maxLambdaSize": "15mb",
+                "runtime": "python3.13",
+                "buildCommand": "bash build_files.sh"
+            }
+        }
+    ],
+    "routes": [
+        {
+            "src": "/static/(.*)",
+            "dest": "GroceryMart_api/wsgi.py"
+        },
+        {
+            "src": "/media/(.*)",
+            "dest": "GroceryMart_api/wsgi.py"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "GroceryMart_api/wsgi.py"
+        }
+    ]
+}

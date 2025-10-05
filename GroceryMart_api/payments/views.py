@@ -15,10 +15,30 @@ from .sslcommerz_gateway import SSLCOMMERZGateway
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 
+from drf_spectacular.utils import extend_schema, OpenApiResponse
+
 logger = logging.getLogger(__name__)
 
 
+@extend_schema(
+    summary="Initiate payment for cart",
+    tags=['Payments'],
+    responses={
+        200: OpenApiResponse(
+            description="Payment initiated (varies by gateway)",
+            examples=[
+                {"payment_url": "https://example.com/pay"},  # SSLCOMMERZ/Stripe
+                {"client_secret": "pi_xxx_secret_xxx", "payment_intent_id": "pi_xxx"},  # For Stripe Custom
+            ]
+        ),
+        400: OpenApiResponse(description="Invalid request or payment method"),
+        402: OpenApiResponse(description="Insufficient balance or stock error"),
+    }
+)
 class PaymentInitAPIView(APIView):
+    """
+    Initiate payment for the user's cart using selected gateway (sslcommerz, stripe, stripe_custom).
+    """
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
@@ -50,7 +70,7 @@ class PaymentInitAPIView(APIView):
 
             total = cart.total
             order = Order.objects.create(
-                user=request.user, total=total, status="pending"
+                user=request.user, total=total, status="pending", payment_method='balance'
             )
             logger.info(f"Order {order.id} created for user {request.user.id}")
 
@@ -82,6 +102,11 @@ class PaymentInitAPIView(APIView):
 
 
 # IPN = Instant Payment Notification
+@extend_schema(
+    summary="SSLCOMMERZ IPN webhook",
+    tags=['Payments'],
+    exclude=True,  # Exclude from schema if internal
+)
 @method_decorator(csrf_exempt, name="dispatch")
 class IPNView(APIView):
     authentication_classes = []
@@ -89,6 +114,13 @@ class IPNView(APIView):
 
     def post(self, request):
         logger.info(f"SSLCOMMERZ IPN received: {request.data}")
+        tran_id = request.data.get("tran_id")
+        val_id = request.data.get("val_id")
+        # Basic idempotency: Use val_id as unique event identifier
+        if Order.objects.filter(id=tran_id, payment_event_id=val_id).exists():
+            logger.info(f"IPN event {val_id} for order {tran_id} already processed")
+            return Response({"status": "already processed"}, status=status.HTTP_200_OK)
+
         gateway = SSLCOMMERZGateway()
         success, error = gateway.validate_payment(request.data)
         if not success:
@@ -102,6 +134,8 @@ class IPNView(APIView):
                 return Response({"status": "ok"}, status=status.HTTP_200_OK)
             cart = Cart.objects.get(user=order.user)
             gateway.process_order(cart, order)
+            order.payment_event_id = val_id  # Store event ID for idempotency
+            order.save()
             logger.info(f"Order {order.id} processed successfully via SSLCOMMERZ")
             return Response({"status": "ok"}, status=status.HTTP_200_OK)
         except Order.DoesNotExist:
@@ -123,7 +157,11 @@ class IPNView(APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
-
+@extend_schema(
+    summary="Stripe webhook for payment validation",
+    tags=['Payments'],
+    exclude=True,
+)
 @method_decorator(csrf_exempt, name="dispatch")
 class StripeWebhookView(APIView):
     authentication_classes = []
@@ -136,6 +174,11 @@ class StripeWebhookView(APIView):
 
         try:
             event = stripe.Webhook.construct_event(payload, sig_header, endpoint_secret)
+            # Idempotency: Check if event ID already processed
+            if Order.objects.filter(payment_event_id=event.id).exists():
+                logger.info(f"Stripe event {event.id} already processed")
+                return Response({"status": "already processed"}, status=status.HTTP_200_OK)
+
         except ValueError as e:
             logger.error(f"Invalid Stripe webhook payload: {str(e)}")
             return Response(
@@ -161,6 +204,8 @@ class StripeWebhookView(APIView):
                 )
                 if success:
                     gateway.process_order(cart, order)
+                    order.payment_event_id = event.id  # Store event ID for idempotency
+                    order.save()
                     logger.info(
                         f"Order {order_id} processed successfully via Stripe Custom gateway"
                     )
@@ -169,6 +214,7 @@ class StripeWebhookView(APIView):
                     f"Stripe payment validation failed for order {order_id}: {error}"
                 )
                 return Response({"status": error}, status=status.HTTP_400_BAD_REQUEST)
+            
             except Order.DoesNotExist:
                 logger.error(f"Order {order_id} not found for Stripe webhook")
                 return Response(
@@ -195,6 +241,8 @@ class StripeWebhookView(APIView):
                     )
                     if success:
                         gateway.process_order(cart, order)
+                        order.payment_event_id = event.id  # Store event ID for idempotency
+                        order.save()
                         logger.info(
                             f"Order {order_id} processed successfully via Stripe Hosted"
                         )
@@ -205,6 +253,7 @@ class StripeWebhookView(APIView):
                     return Response(
                         {"status": error}, status=status.HTTP_400_BAD_REQUEST
                     )
+                
                 except Order.DoesNotExist:
                     logger.error(
                         f"Order {order_id} not found for Stripe Hosted webhook"

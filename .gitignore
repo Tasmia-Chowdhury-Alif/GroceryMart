@@ -1,7 +1,7 @@
 # Python
 .pytest_cache
-# **__pycache__/
-# __pycache__/
+**__pycache__/
+__pycache__/
 # *.py[cod]
 # *.sqlite3
 
@@ -20,8 +20,6 @@ env/
 *.pot
 *.pyc
 
-api.http
-*.http
 
 
 # VS Code
