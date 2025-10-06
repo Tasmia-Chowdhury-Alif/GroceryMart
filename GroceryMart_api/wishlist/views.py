@@ -6,7 +6,14 @@ from rest_framework.response import Response
 from .models import Wishlist, WishlistItem
 from .serializers import WishlistItemSerializer, WishlistSerializer
 
+from drf_spectacular.utils import extend_schema_view, extend_schema, OpenApiResponse
 
+@extend_schema_view(
+    list=extend_schema(
+        summary="Retrieve the current user's wishlist", 
+        tags=['Wishlist']),
+        responses={200: WishlistSerializer(many=False)}
+)
 class WishlistViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
 
@@ -15,6 +22,12 @@ class WishlistViewSet(viewsets.ViewSet):
         serializer = WishlistSerializer(instance=wishlist)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @extend_schema(
+        summary="Add item to wishlist",
+        request=WishlistItemSerializer,
+        responses={201: OpenApiResponse(description="Item added")},
+        tags=['Wishlist']
+    )
     @action(methods=["post"], detail=False)
     def add_item(self, request):
         wishlist, _ = Wishlist.objects.get_or_create(user=request.user)
@@ -37,6 +50,11 @@ class WishlistViewSet(viewsets.ViewSet):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @extend_schema(
+        summary="Remove item from wishlist",
+        responses={204: OpenApiResponse(description="Item removed")},
+        tags=['Wishlist']
+    )
     @action(detail=False, methods=["post"])
     def remove_item(self, request):
         wishlist, _ = Wishlist.objects.get_or_create(user=request.user)

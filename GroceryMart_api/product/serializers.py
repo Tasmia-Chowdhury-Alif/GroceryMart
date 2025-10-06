@@ -3,20 +3,25 @@ from rest_framework import serializers
 from .models import Category, Brand, Product, Review
 from accounts.serializers import UserSerializer
 
+from drf_spectacular.utils import extend_schema_field
+
 
 class CategorySerializer(serializers.ModelSerializer):
+    """Serializer for categories."""
     class Meta:
         model = Category
         fields = "__all__"
 
 
 class BrandSerializer(serializers.ModelSerializer):
+    """Serializer for brands."""
     class Meta:
         model = Brand
         fields = "__all__"
 
 
 class ReviewSerializer(serializers.ModelSerializer):
+    """Serializer for product reviews."""
     user = UserSerializer(read_only=True)
     product = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all())
 
@@ -41,6 +46,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    """Serializer for products, including nested brand, category, and reviews."""
     brand = BrandSerializer()
     category = CategorySerializer()
     reviews = ReviewSerializer(many=True, read_only=True)
@@ -53,6 +59,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'category', 'is_digital', 'created_at', 'updated_at', 'reviews', 'average_rating'
         ]
 
+    @extend_schema_field(serializers.FloatField)
     def get_average_rating(self, obj): # obj is the Product instance
         return obj.average_rating()
 

@@ -8,16 +8,35 @@ from .serializers import CartSerializer, CartItemSerializer, CartItemQuantitySer
 from product.models import Product
 
 
-"""
-"""
-class CartViewSet(viewsets.ViewSet):
+from drf_spectacular.utils import extend_schema_view, extend_schema, OpenApiResponse
+
+@extend_schema_view(
+    list=extend_schema(
+        summary="Retrieve the current user's cart", 
+        tags=['Cart']), 
+        responses={
+            200: OpenApiResponse(
+                response=CartSerializer(many=False),
+                description="Cart retrieved successfully"
+            )
+        }
+)
+class CartViewSet(viewsets.GenericViewSet):
     permission_classes= [IsAuthenticated]
+    serializer_class = CartSerializer
 
     def list(self, request):
         cart, created = Cart.objects.get_or_create(user= request.user)
         serializer = CartSerializer(instance= cart)
         return Response(serializer.data)
     
+
+    @extend_schema(
+        summary="Add item to cart",
+        request=CartItemSerializer,
+        responses={201: OpenApiResponse(description="Item added to cart")},
+        tags=['Cart']
+    )
     @action(methods=['post'], detail=False)
     def add_item(self, request):
         cart, created = Cart.objects.get_or_create(user= request.user)
@@ -52,6 +71,12 @@ class CartViewSet(viewsets.ViewSet):
             return Response({"message" : "Item added to cart"}, status= status.HTTP_201_CREATED)
         return Response({"message" : serializer.errors}, status= status.HTTP_400_BAD_REQUEST)
     
+
+    @extend_schema(
+        summary="Remove item from cart",
+        responses={204: OpenApiResponse(description="Item removed")},
+        tags=['Cart']
+    )
     @action(detail=False, methods=['post'])
     def remove_item(self, request):
         cart, _ = Cart.objects.get_or_create(user= request.user)
@@ -65,6 +90,12 @@ class CartViewSet(viewsets.ViewSet):
             return Response({"message" : "Item Not Found"}, status=status.HTTP_404_NOT_FOUND)
         
 
+    @extend_schema(
+        summary="Update cart item quantity",
+        request=CartItemQuantitySerializer,
+        responses={200: OpenApiResponse(description="Quantity updated")},
+        tags=['Cart']
+    )
     @action(detail=True, methods=['patch'])
     def update_quantity(self, request, pk):
         try:

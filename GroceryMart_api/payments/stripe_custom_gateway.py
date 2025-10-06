@@ -7,6 +7,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 class StripeCustomGateway(PaymentGateway):
+    """Custom Stripe gateway for client-side payment confirmation."""
     def __init__(self):
         stripe.api_key = settings.STRIPE_SECRET_KEY
 

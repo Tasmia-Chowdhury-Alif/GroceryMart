@@ -3,64 +3,33 @@ from django.contrib.auth.models import User
 
 from rest_framework import generics, status, viewsets
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated, BasePermission
 
 from . import models, serializers
 
-# from django.contrib.auth.tokens import default_token_generator
-# from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-# from django.utils.encoding import force_bytes
-
-# from django.core.mail import EmailMultiAlternatives
-# from django.template.loader import render_to_string
-# from django.shortcuts import redirect
+from drf_spectacular.utils import extend_schema_view, extend_schema
 
 
-# def send_verification_email(request, user):
-#     token = default_token_generator.make_token(user)
-#     uid = urlsafe_base64_encode(force_bytes(user.pk))  # user id
+class IsOwner(BasePermission):
+    """Permission to allow only owners to edit their profile."""
+    def has_object_permission(self, request, view, obj):
+        return obj.user == request.user
 
-#     confirm_link = request.build_absolute_uri(f"http://127.0.0.1:8000/accounts/activate/{uid}/{token}/")
-#     email_subject = "GroceryMart Account Varification"
-#     email_body = render_to_string(
-#         "accounts/verification_email.html", {"confirm_link": confirm_link}
-#     )
-
-#     email = EmailMultiAlternatives(email_subject, "", to=[user.email])
-#     email.attach_alternative(email_body, "text/html")
-#     email.send()
-
-#     return
-
-
-# # Create your views here.
-# class RegistrationViewSet(generics.CreateAPIView):
-#     serializer_class = RegistrationSerializer
-
-#     def perform_create(self, serializer):
-#         user = serializer.save()
-#         send_verification_email(self.request, user)
-#         return Response(
-#             {"message": "Check your email to activate your account."},
-#             status=status.HTTP_201_CREATED,
-#         )
-
-
-# def activate(request, uid64, token):
-#     try:
-#         uid = urlsafe_base64_decode(uid64).decode()  # user id
-#         user = User._default_manager.get(pk=uid)
-#     except User.DoesNotExist:
-#         user = None
-
-#     if user is not None and default_token_generator.check_token(user, token):
-#         user.is_active = True
-#         user.save()
-#         return redirect("registration")
-#     else:
-#         print("Invalid credentials")
-#         return redirect("registration")
-
-
+@extend_schema_view(
+    list=extend_schema(summary="List all user profiles", tags=['Accounts']),
+    retrieve=extend_schema(summary="Retrieve a user profile", tags=['Accounts']),
+    create=extend_schema(summary="Create a user profile", tags=['Accounts']),
+    update=extend_schema(summary="Update a user profile", tags=['Accounts']),
+    partial_update=extend_schema(summary="Partially update a user profile", tags=['Accounts']),
+    destroy=extend_schema(summary="Delete a user profile", tags=['Accounts']),
+)
 class ProfileViewset(viewsets.ModelViewSet):
     queryset = models.Profile.objects.all()
     serializer_class = serializers.ProfileSerializer
+    permission_classes = [IsAuthenticated, IsOwner]
+
+    # Limit queryset to user's own profile for non-admin
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return super().get_queryset()
+        return models.Profile.objects.filter(user=self.request.user)
