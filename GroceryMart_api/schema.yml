@@ -4,11 +4,12 @@ info:
   version: 1.0.0
   description: A Django REST Framework-based e-commerce backend for a grocery store,
     featuring user authentication, product management, cart, wishlist, orders, and
-    multiple payment gateways (SSLCOMMERZ, Stripe).
+    multiple payment gateways (SSLCOMMERZ and Stripe).
 paths:
   /accounts/profile/:
     get:
       operationId: accounts_profile_list
+      summary: List all user profiles
       parameters:
       - name: ordering
         required: false
@@ -29,10 +30,9 @@ paths:
         schema:
           type: string
       tags:
-      - accounts
+      - Accounts
       security:
       - jwtAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -42,23 +42,23 @@ paths:
           description: ''
     post:
       operationId: accounts_profile_create
+      summary: Create a user profile
       tags:
-      - accounts
+      - Accounts
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Profile'
+              $ref: '#/components/schemas/ProfileRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/Profile'
+              $ref: '#/components/schemas/ProfileRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/Profile'
+              $ref: '#/components/schemas/ProfileRequest'
         required: true
       security:
       - jwtAuth: []
-      - {}
       responses:
         '201':
           content:
@@ -69,6 +69,7 @@ paths:
   /accounts/profile/{id}/:
     get:
       operationId: accounts_profile_retrieve
+      summary: Retrieve a user profile
       parameters:
       - in: path
         name: id
@@ -77,10 +78,9 @@ paths:
         description: A unique integer value identifying this profile.
         required: true
       tags:
-      - accounts
+      - Accounts
       security:
       - jwtAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -90,6 +90,7 @@ paths:
           description: ''
     put:
       operationId: accounts_profile_update
+      summary: Update a user profile
       parameters:
       - in: path
         name: id
@@ -98,22 +99,21 @@ paths:
         description: A unique integer value identifying this profile.
         required: true
       tags:
-      - accounts
+      - Accounts
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Profile'
+              $ref: '#/components/schemas/ProfileRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/Profile'
+              $ref: '#/components/schemas/ProfileRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/Profile'
+              $ref: '#/components/schemas/ProfileRequest'
         required: true
       security:
       - jwtAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -123,6 +123,7 @@ paths:
           description: ''
     patch:
       operationId: accounts_profile_partial_update
+      summary: Partially update a user profile
       parameters:
       - in: path
         name: id
@@ -131,21 +132,20 @@ paths:
         description: A unique integer value identifying this profile.
         required: true
       tags:
-      - accounts
+      - Accounts
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedProfile'
+              $ref: '#/components/schemas/PatchedProfileRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedProfile'
+              $ref: '#/components/schemas/PatchedProfileRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedProfile'
+              $ref: '#/components/schemas/PatchedProfileRequest'
       security:
       - jwtAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -155,6 +155,7 @@ paths:
           description: ''
     delete:
       operationId: accounts_profile_destroy
+      summary: Delete a user profile
       parameters:
       - in: path
         name: id
@@ -163,10 +164,9 @@ paths:
         description: A unique integer value identifying this profile.
         required: true
       tags:
-      - accounts
+      - Accounts
       security:
       - jwtAuth: []
-      - {}
       responses:
         '204':
           description: No response body
@@ -182,13 +182,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TokenObtainPair'
+              $ref: '#/components/schemas/TokenObtainPairRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/TokenObtainPair'
+              $ref: '#/components/schemas/TokenObtainPairRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/TokenObtainPair'
+              $ref: '#/components/schemas/TokenObtainPairRequest'
         required: true
       responses:
         '200':
@@ -209,13 +209,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TokenRefresh'
+              $ref: '#/components/schemas/TokenRefreshRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/TokenRefresh'
+              $ref: '#/components/schemas/TokenRefreshRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/TokenRefresh'
+              $ref: '#/components/schemas/TokenRefreshRequest'
         required: true
       responses:
         '200':
@@ -236,21 +236,17 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TokenVerify'
+              $ref: '#/components/schemas/TokenVerifyRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/TokenVerify'
+              $ref: '#/components/schemas/TokenVerifyRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/TokenVerify'
+              $ref: '#/components/schemas/TokenVerifyRequest'
         required: true
       responses:
         '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TokenVerify'
-          description: ''
+          description: No response body
   /auth/users/:
     get:
       operationId: auth_users_list
@@ -292,13 +288,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserCreatePasswordRetype'
+              $ref: '#/components/schemas/UserCreatePasswordRetypeRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/UserCreatePasswordRetype'
+              $ref: '#/components/schemas/UserCreatePasswordRetypeRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/UserCreatePasswordRetype'
+              $ref: '#/components/schemas/UserCreatePasswordRetypeRequest'
         required: true
       security:
       - jwtAuth: []
@@ -346,13 +342,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserRequest'
       security:
       - jwtAuth: []
       responses:
@@ -377,13 +373,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedUser'
+              $ref: '#/components/schemas/PatchedUserRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedUser'
+              $ref: '#/components/schemas/PatchedUserRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedUser'
+              $ref: '#/components/schemas/PatchedUserRequest'
       security:
       - jwtAuth: []
       responses:
@@ -418,13 +414,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Activation'
+              $ref: '#/components/schemas/ActivationRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/Activation'
+              $ref: '#/components/schemas/ActivationRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/Activation'
+              $ref: '#/components/schemas/ActivationRequest'
         required: true
       security:
       - jwtAuth: []
@@ -458,13 +454,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserRequest'
       security:
       - jwtAuth: []
       responses:
@@ -482,13 +478,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedUser'
+              $ref: '#/components/schemas/PatchedUserRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedUser'
+              $ref: '#/components/schemas/PatchedUserRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedUser'
+              $ref: '#/components/schemas/PatchedUserRequest'
       security:
       - jwtAuth: []
       responses:
@@ -516,13 +512,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SendEmailReset'
+              $ref: '#/components/schemas/SendEmailResetRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/SendEmailReset'
+              $ref: '#/components/schemas/SendEmailResetRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/SendEmailReset'
+              $ref: '#/components/schemas/SendEmailResetRequest'
         required: true
       security:
       - jwtAuth: []
@@ -543,13 +539,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SendEmailReset'
+              $ref: '#/components/schemas/SendEmailResetRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/SendEmailReset'
+              $ref: '#/components/schemas/SendEmailResetRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/SendEmailReset'
+              $ref: '#/components/schemas/SendEmailResetRequest'
         required: true
       security:
       - jwtAuth: []
@@ -570,13 +566,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PasswordResetConfirm'
+              $ref: '#/components/schemas/PasswordResetConfirmRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PasswordResetConfirm'
+              $ref: '#/components/schemas/PasswordResetConfirmRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PasswordResetConfirm'
+              $ref: '#/components/schemas/PasswordResetConfirmRequest'
         required: true
       security:
       - jwtAuth: []
@@ -597,13 +593,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SendEmailReset'
+              $ref: '#/components/schemas/SendEmailResetRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/SendEmailReset'
+              $ref: '#/components/schemas/SendEmailResetRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/SendEmailReset'
+              $ref: '#/components/schemas/SendEmailResetRequest'
         required: true
       security:
       - jwtAuth: []
@@ -624,13 +620,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UsernameResetConfirm'
+              $ref: '#/components/schemas/UsernameResetConfirmRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/UsernameResetConfirm'
+              $ref: '#/components/schemas/UsernameResetConfirmRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/UsernameResetConfirm'
+              $ref: '#/components/schemas/UsernameResetConfirmRequest'
         required: true
       security:
       - jwtAuth: []
@@ -651,13 +647,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SetPassword'
+              $ref: '#/components/schemas/SetPasswordRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/SetPassword'
+              $ref: '#/components/schemas/SetPasswordRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/SetPassword'
+              $ref: '#/components/schemas/SetPasswordRequest'
         required: true
       security:
       - jwtAuth: []
@@ -677,13 +673,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SetUsername'
+              $ref: '#/components/schemas/SetUsernameRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/SetUsername'
+              $ref: '#/components/schemas/SetUsernameRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/SetUsername'
+              $ref: '#/components/schemas/SetUsernameRequest'
         required: true
       security:
       - jwtAuth: []
@@ -696,27 +692,65 @@ paths:
           description: ''
   /cart/:
     get:
-      operationId: cart_retrieve
+      operationId: cart_list
+      summary: Retrieve the current user's cart
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
       tags:
-      - cart
+      - Cart
       security:
       - jwtAuth: []
       responses:
         '200':
-          description: No response body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCartList'
+          description: ''
   /cart/add/:
     post:
       operationId: cart_add_create
+      summary: Add item to cart
       tags:
-      - cart
+      - Cart
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartItemRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CartItemRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CartItemRequest'
+        required: true
       security:
       - jwtAuth: []
       responses:
-        '200':
-          description: No response body
+        '201':
+          description: Item added to cart
   /cart/items/{id}/update-quantity/:
     patch:
       operationId: cart_items_update_quantity_partial_update
+      summary: Update cart item quantity
       parameters:
       - in: path
         name: id
@@ -724,25 +758,38 @@ paths:
           type: integer
         required: true
       tags:
-      - cart
+      - Cart
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCartItemQuantityRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCartItemQuantityRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCartItemQuantityRequest'
       security:
       - jwtAuth: []
       responses:
         '200':
-          description: No response body
+          description: Quantity updated
   /cart/remove/:
     post:
       operationId: cart_remove_create
+      summary: Remove item from cart
       tags:
-      - cart
+      - Cart
       security:
       - jwtAuth: []
       responses:
-        '200':
-          description: No response body
+        '204':
+          description: Item removed
   /orders/:
     get:
       operationId: orders_list
+      summary: List user's order history
       parameters:
       - name: ordering
         required: false
@@ -757,7 +804,7 @@ paths:
         schema:
           type: string
       tags:
-      - orders
+      - Orders
       security:
       - jwtAuth: []
       responses:
@@ -772,6 +819,7 @@ paths:
   /orders/{id}/:
     get:
       operationId: orders_retrieve
+      summary: Retrieve order details
       parameters:
       - in: path
         name: id
@@ -779,7 +827,7 @@ paths:
           type: integer
         required: true
       tags:
-      - orders
+      - Orders
       security:
       - jwtAuth: []
       responses:
@@ -792,79 +840,77 @@ paths:
   /orders/checkout/:
     post:
       operationId: orders_checkout_create
+      summary: Checkout and place order using balance
       tags:
-      - orders
+      - Orders
       security:
       - jwtAuth: []
       responses:
-        '200':
-          description: No response body
+        '201':
+          description: Order placed successfully
   /payments/init/:
     post:
       operationId: payments_init_create
+      description: Initiate payment for the user's cart using selected gateway (sslcommerz,
+        stripe, stripe_custom).
+      summary: Initiate payment for cart
       tags:
-      - payments
+      - Payments
       security:
       - jwtAuth: []
       responses:
         '200':
-          description: No response body
-  /payments/ipn/:
-    post:
-      operationId: payments_ipn_create
-      tags:
-      - payments
-      responses:
-        '200':
-          description: No response body
-  /payments/stripe-webhook/:
-    post:
-      operationId: payments_stripe_webhook_create
-      tags:
-      - payments
-      responses:
-        '200':
-          description: No response body
+          description: Payment initiated (varies by gateway)
+        '400':
+          description: Invalid request or payment method
+        '402':
+          description: Insufficient balance or stock error
   /products/:
     get:
       operationId: products_list
+      description: Retrieve products with filtering, searching, and ordering.
+      summary: List products
       parameters:
       - in: query
         name: brand
         schema:
           type: integer
+        description: Filter by brand ID
       - in: query
         name: category
         schema:
           type: integer
+        description: Filter by category ID
       - in: query
         name: max_price
         schema:
           type: number
+          format: double
+        description: Maximum price
       - in: query
         name: min_price
         schema:
           type: number
-      - name: ordering
-        required: false
-        in: query
-        description: Which field to use when ordering the results.
+          format: double
+        description: Minimum price
+      - in: query
+        name: ordering
         schema:
           type: string
+        description: Order by price or created_at (prefix - for descending)
       - name: page
         required: false
         in: query
         description: A page number within the paginated result set.
         schema:
           type: integer
-      - name: search
-        required: false
-        in: query
-        description: A search term.
+      - in: query
+        name: search
         schema:
           type: string
+        description: Search by name or description
       tags:
-      - products
+      - Products
       security:
       - jwtAuth: []
       - {}
@@ -877,19 +923,20 @@ paths:
           description: ''
     post:
       operationId: products_create
+      summary: Create product
       tags:
-      - products
+      - Products
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Product'
+              $ref: '#/components/schemas/ProductRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/Product'
+              $ref: '#/components/schemas/ProductRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/Product'
+              $ref: '#/components/schemas/ProductRequest'
         required: true
       security:
       - jwtAuth: []
@@ -904,6 +951,7 @@ paths:
   /products/{id}/:
     get:
       operationId: products_retrieve
+      summary: Retrieve product
       parameters:
       - in: path
         name: id
@@ -912,7 +960,7 @@ paths:
         description: A unique integer value identifying this product.
         required: true
       tags:
-      - products
+      - Products
       security:
       - jwtAuth: []
       - {}
@@ -925,6 +973,7 @@ paths:
           description: ''
     put:
       operationId: products_update
+      summary: Update product
       parameters:
       - in: path
         name: id
@@ -933,18 +982,18 @@ paths:
         description: A unique integer value identifying this product.
         required: true
       tags:
-      - products
+      - Products
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Product'
+              $ref: '#/components/schemas/ProductRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/Product'
+              $ref: '#/components/schemas/ProductRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/Product'
+              $ref: '#/components/schemas/ProductRequest'
         required: true
       security:
       - jwtAuth: []
@@ -958,6 +1007,7 @@ paths:
           description: ''
     patch:
       operationId: products_partial_update
+      summary: Partially update product
       parameters:
       - in: path
         name: id
@@ -966,18 +1016,18 @@ paths:
         description: A unique integer value identifying this product.
         required: true
       tags:
-      - products
+      - Products
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedProduct'
+              $ref: '#/components/schemas/PatchedProductRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedProduct'
+              $ref: '#/components/schemas/PatchedProductRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedProduct'
+              $ref: '#/components/schemas/PatchedProductRequest'
       security:
       - jwtAuth: []
       - {}
@@ -990,6 +1040,7 @@ paths:
           description: ''
     delete:
       operationId: products_destroy
+      summary: Delete product
       parameters:
       - in: path
         name: id
@@ -998,7 +1049,7 @@ paths:
         description: A unique integer value identifying this product.
         required: true
       tags:
-      - products
+      - Products
       security:
       - jwtAuth: []
       - {}
@@ -1008,6 +1059,7 @@ paths:
   /products/brands/:
     get:
       operationId: products_brands_list
+      summary: List of brands
       parameters:
       - name: ordering
         required: false
@@ -1028,7 +1080,7 @@ paths:
         schema:
           type: string
       tags:
-      - products
+      - Products
       security:
       - jwtAuth: []
       - {}
@@ -1042,6 +1094,7 @@ paths:
   /products/brands/{id}/:
     get:
       operationId: products_brands_retrieve
+      summary: Retrieve brand
       parameters:
       - in: path
         name: id
@@ -1050,7 +1103,7 @@ paths:
         description: A unique integer value identifying this brand.
         required: true
       tags:
-      - products
+      - Products
       security:
       - jwtAuth: []
       - {}
@@ -1064,6 +1117,10 @@ paths:
   /products/categories/:
     get:
       operationId: products_categories_list
+      description: |-
+        get:
+        Retrieve a list of categories or a single category.
+      summary: List categories
       parameters:
       - name: ordering
         required: false
@@ -1084,7 +1141,7 @@ paths:
         schema:
           type: string
       tags:
-      - products
+      - Products
       security:
       - jwtAuth: []
       - {}
@@ -1098,6 +1155,10 @@ paths:
   /products/categories/{id}/:
     get:
       operationId: products_categories_retrieve
+      description: |-
+        get:
+        Retrieve a list of categories or a single category.
+      summary: Retrieve category
       parameters:
       - in: path
         name: id
@@ -1106,7 +1167,7 @@ paths:
         description: A unique integer value identifying this category.
         required: true
       tags:
-      - products
+      - Products
       security:
       - jwtAuth: []
       - {}
@@ -1120,6 +1181,7 @@ paths:
   /products/reviews/:
     get:
       operationId: products_reviews_list
+      summary: List reviews
       parameters:
       - name: ordering
         required: false
@@ -1133,6 +1195,11 @@ paths:
         description: A page number within the paginated result set.
         schema:
           type: integer
+      - in: query
+        name: product_id
+        schema:
+          type: integer
+        description: Filter by product ID
       - name: search
         required: false
         in: query
@@ -1140,7 +1207,7 @@ paths:
         schema:
           type: string
       tags:
-      - products
+      - Products
       security:
       - jwtAuth: []
       - {}
@@ -1153,19 +1220,20 @@ paths:
           description: ''
     post:
       operationId: products_reviews_create
+      summary: Create review (purchaser only)
       tags:
-      - products
+      - Products
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Review'
+              $ref: '#/components/schemas/ReviewRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/Review'
+              $ref: '#/components/schemas/ReviewRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/Review'
+              $ref: '#/components/schemas/ReviewRequest'
         required: true
       security:
       - jwtAuth: []
@@ -1179,6 +1247,7 @@ paths:
   /products/reviews/{id}/:
     get:
       operationId: products_reviews_retrieve
+      summary: Retrieve review
       parameters:
       - in: path
         name: id
@@ -1187,7 +1256,7 @@ paths:
         description: A unique integer value identifying this review.
         required: true
       tags:
-      - products
+      - Products
       security:
       - jwtAuth: []
       - {}
@@ -1200,6 +1269,7 @@ paths:
           description: ''
     put:
       operationId: products_reviews_update
+      summary: Update review (owner only)
       parameters:
       - in: path
         name: id
@@ -1208,18 +1278,18 @@ paths:
         description: A unique integer value identifying this review.
         required: true
       tags:
-      - products
+      - Products
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Review'
+              $ref: '#/components/schemas/ReviewRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/Review'
+              $ref: '#/components/schemas/ReviewRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/Review'
+              $ref: '#/components/schemas/ReviewRequest'
         required: true
       security:
       - jwtAuth: []
@@ -1232,6 +1302,7 @@ paths:
           description: ''
     patch:
       operationId: products_reviews_partial_update
+      summary: Partially update review (owner only)
       parameters:
       - in: path
         name: id
@@ -1240,18 +1311,18 @@ paths:
         description: A unique integer value identifying this review.
         required: true
       tags:
-      - products
+      - Products
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedReview'
+              $ref: '#/components/schemas/PatchedReviewRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedReview'
+              $ref: '#/components/schemas/PatchedReviewRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedReview'
+              $ref: '#/components/schemas/PatchedReviewRequest'
       security:
       - jwtAuth: []
       responses:
@@ -1263,6 +1334,7 @@ paths:
           description: ''
     delete:
       operationId: products_reviews_destroy
+      summary: Delete review (owner only)
       parameters:
       - in: path
         name: id
@@ -1271,7 +1343,7 @@ paths:
         description: A unique integer value identifying this review.
         required: true
       tags:
-      - products
+      - Products
       security:
       - jwtAuth: []
       responses:
@@ -1280,8 +1352,9 @@ paths:
   /wishlist/:
     get:
       operationId: wishlist_retrieve
+      summary: Retrieve the current user's wishlist
       tags:
-      - wishlist
+      - Wishlist
       security:
       - jwtAuth: []
       responses:
@@ -1290,23 +1363,37 @@ paths:
   /wishlist/add/:
     post:
       operationId: wishlist_add_create
+      summary: Add item to wishlist
       tags:
-      - wishlist
+      - Wishlist
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WishlistItemRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/WishlistItemRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/WishlistItemRequest'
+        required: true
       security:
       - jwtAuth: []
       responses:
-        '200':
-          description: No response body
+        '201':
+          description: Item added
   /wishlist/remove/:
     post:
       operationId: wishlist_remove_create
+      summary: Remove item from wishlist
       tags:
-      - wishlist
+      - Wishlist
       security:
       - jwtAuth: []
       responses:
-        '200':
-          description: No response body
+        '204':
+          description: Item removed
 components:
   schemas:
     Activation:
@@ -1319,8 +1406,21 @@ components:
       required:
       - token
       - uid
+    ActivationRequest:
+      type: object
+      properties:
+        uid:
+          type: string
+          minLength: 1
+        token:
+          type: string
+          minLength: 1
+      required:
+      - token
+      - uid
     Brand:
       type: object
+      description: Serializer for brands.
       properties:
         id:
           type: integer
@@ -1331,8 +1431,78 @@ components:
       required:
       - id
       - name
+    BrandRequest:
+      type: object
+      description: Serializer for brands.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+      required:
+      - name
+    Cart:
+      type: object
+      description: Serializer for the entire cart, including items and total.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: integer
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartItem'
+          readOnly: true
+        total:
+          type: string
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - items
+      - total
+      - user
+    CartItem:
+      type: object
+      description: Serializer for cart items, including product details.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        product:
+          allOf:
+          - $ref: '#/components/schemas/Product'
+          readOnly: true
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+      required:
+      - id
+      - product
+    CartItemRequest:
+      type: object
+      description: Serializer for cart items, including product details.
+      properties:
+        product_id:
+          type: integer
+          writeOnly: true
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+      required:
+      - product_id
     Category:
       type: object
+      description: Serializer for categories.
       properties:
         id:
           type: integer
@@ -1367,8 +1537,28 @@ components:
       - rght
       - slug
       - tree_id
+    CategoryRequest:
+      type: object
+      description: Serializer for categories.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+        slug:
+          type: string
+          minLength: 1
+          maxLength: 150
+          pattern: ^[-a-zA-Z0-9_]+$
+        parent:
+          type: integer
+          nullable: true
+      required:
+      - name
+      - slug
     Order:
       type: object
+      description: Serializer for orders, including items.
       properties:
         id:
           type: integer
@@ -1380,7 +1570,7 @@ components:
           format: decimal
           pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
         status:
-          $ref: '#/components/schemas/StatusEnum'
+          $ref: '#/components/schemas/OrderStatusEnum'
         created_at:
           type: string
           format: date-time
@@ -1390,6 +1580,10 @@ components:
           items:
             $ref: '#/components/schemas/OrderItem'
           readOnly: true
+        payment_method:
+          allOf:
+          - $ref: '#/components/schemas/PaymentMethodEnum'
+          nullable: true
       required:
       - created_at
       - id
@@ -1398,6 +1592,7 @@ components:
       - user
     OrderItem:
       type: object
+      description: Serializer for order item.
       properties:
         id:
           type: integer
@@ -1409,9 +1604,8 @@ components:
           readOnly: true
         quantity:
           type: integer
-          maximum: 9223372036854775807
+          maximum: 2147483647
           minimum: 0
-          format: int64
         price:
           type: string
           format: decimal
@@ -1422,6 +1616,18 @@ components:
       - product
       - product_name
       - quantity
+    OrderStatusEnum:
+      enum:
+      - pending
+      - paid
+      - failed
+      - cancelled
+      type: string
+      description: |-
+        * `pending` - Pending
+        * `paid` - Paid
+        * `failed` - Failed
+        * `cancelled` - Cancelled
     PaginatedBrandList:
       type: object
       required:
@@ -1445,6 +1651,29 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Brand'
+    PaginatedCartList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Cart'
     PaginatedCategoryList:
       type: object
       required:
@@ -1573,14 +1802,38 @@ components:
       - new_password
       - token
       - uid
-    PatchedProduct:
+    PasswordResetConfirmRequest:
       type: object
       properties:
-        id:
+        uid:
+          type: string
+          minLength: 1
+        token:
+          type: string
+          minLength: 1
+        new_password:
+          type: string
+          minLength: 1
+      required:
+      - new_password
+      - token
+      - uid
+    PatchedCartItemQuantityRequest:
+      type: object
+      description: Serializer for updating cart item quantity.
+      properties:
+        quantity:
           type: integer
-          readOnly: true
+          maximum: 2147483647
+          minimum: 0
+    PatchedProductRequest:
+      type: object
+      description: Serializer for products, including nested brand, category, and
+        reviews.
+      properties:
         name:
           type: string
+          minLength: 1
           maxLength: 200
         description:
           type: string
@@ -1590,81 +1843,54 @@ components:
           pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
         stock:
           type: integer
-          maximum: 9223372036854775807
+          maximum: 2147483647
           minimum: 0
-          format: int64
         image:
           type: string
-          format: uri
+          minLength: 1
           nullable: true
         brand:
-          $ref: '#/components/schemas/Brand'
+          $ref: '#/components/schemas/BrandRequest'
         category:
-          $ref: '#/components/schemas/Category'
+          $ref: '#/components/schemas/CategoryRequest'
         is_digital:
           type: boolean
-        created_at:
-          type: string
-          format: date-time
-          readOnly: true
-        updated_at:
-          type: string
-          format: date-time
-          readOnly: true
-        reviews:
-          type: array
-          items:
-            $ref: '#/components/schemas/Review'
-          readOnly: true
-        average_rating:
-          type: string
-          readOnly: true
-    PatchedProfile:
+    PatchedProfileRequest:
       type: object
+      description: Serializer for user profile details.
       properties:
         user:
           type: integer
         full_name:
           type: string
+          minLength: 1
           maxLength: 200
         phone:
           type: string
+          minLength: 1
           maxLength: 20
         address:
           type: string
+          minLength: 1
         image:
           type: string
-          format: uri
+          minLength: 1
           nullable: true
         shopping_prefs: {}
-    PatchedReview:
+    PatchedReviewRequest:
       type: object
+      description: Serializer for product reviews.
       properties:
-        id:
-          type: integer
-          readOnly: true
         product:
           type: integer
-        user:
-          allOf:
-          - $ref: '#/components/schemas/User'
-          readOnly: true
         rating:
           allOf:
           - $ref: '#/components/schemas/RatingEnum'
           minimum: 0
-          maximum: 9223372036854775807
+          maximum: 2147483647
         comment:
           type: string
-        created_at:
-          type: string
-          format: date-time
-          readOnly: true
-        updated_at:
-          type: string
-          format: date-time
-          readOnly: true
-    PatchedUser:
+    PatchedUserRequest:
       type: object
       properties:
         email:
@@ -1672,16 +1898,22 @@ components:
           format: email
           title: Email address
           maxLength: 254
-        id:
-          type: integer
-          readOnly: true
-        username:
-          type: string
-          readOnly: true
-          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
-            only.
+    PaymentMethodEnum:
+      enum:
+      - sslcommerz
+      - stripe
+      - stripe_custom
+      - balance
+      type: string
+      description: |-
+        * `sslcommerz` - SSLCOMMERZ
+        * `stripe` - Stripe
+        * `stripe_custom` - Stripe Custom
+        * `balance` - Balance
     Product:
       type: object
+      description: Serializer for products, including nested brand, category, and
+        reviews.
       properties:
         id:
           type: integer
@@ -1697,12 +1929,10 @@ components:
           pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
         stock:
           type: integer
-          maximum: 9223372036854775807
+          maximum: 2147483647
           minimum: 0
-          format: int64
         image:
           type: string
-          format: uri
           nullable: true
         brand:
           $ref: '#/components/schemas/Brand'
@@ -1724,7 +1954,8 @@ components:
             $ref: '#/components/schemas/Review'
           readOnly: true
         average_rating:
-          type: string
+          type: number
+          format: double
           readOnly: true
       required:
       - average_rating
@@ -1736,8 +1967,43 @@ components:
       - price
       - reviews
       - updated_at
+    ProductRequest:
+      type: object
+      description: Serializer for products, including nested brand, category, and
+        reviews.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+        description:
+          type: string
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        stock:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        image:
+          type: string
+          minLength: 1
+          nullable: true
+        brand:
+          $ref: '#/components/schemas/BrandRequest'
+        category:
+          $ref: '#/components/schemas/CategoryRequest'
+        is_digital:
+          type: boolean
+      required:
+      - brand
+      - category
+      - name
+      - price
     Profile:
       type: object
+      description: Serializer for user profile details.
       properties:
         user:
           type: integer
@@ -1751,7 +2017,33 @@ components:
           type: string
         image:
           type: string
-          format: uri
+          nullable: true
+        shopping_prefs: {}
+      required:
+      - address
+      - full_name
+      - phone
+      - user
+    ProfileRequest:
+      type: object
+      description: Serializer for user profile details.
+      properties:
+        user:
+          type: integer
+        full_name:
+          type: string
+          minLength: 1
+          maxLength: 200
+        phone:
+          type: string
+          minLength: 1
+          maxLength: 20
+        address:
+          type: string
+          minLength: 1
+        image:
+          type: string
+          minLength: 1
           nullable: true
         shopping_prefs: {}
       required:
@@ -1775,6 +2067,7 @@ components:
         * `5` - 5
     Review:
       type: object
+      description: Serializer for product reviews.
       properties:
         id:
           type: integer
@@ -1789,7 +2082,7 @@ components:
           allOf:
           - $ref: '#/components/schemas/RatingEnum'
           minimum: 0
-          maximum: 9223372036854775807
+          maximum: 2147483647
         comment:
           type: string
         created_at:
@@ -1807,12 +2100,37 @@ components:
       - rating
       - updated_at
       - user
+    ReviewRequest:
+      type: object
+      description: Serializer for product reviews.
+      properties:
+        product:
+          type: integer
+        rating:
+          allOf:
+          - $ref: '#/components/schemas/RatingEnum'
+          minimum: 0
+          maximum: 2147483647
+        comment:
+          type: string
+      required:
+      - product
+      - rating
     SendEmailReset:
       type: object
       properties:
         email:
           type: string
           format: email
+      required:
+      - email
+    SendEmailResetRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 1
       required:
       - email
     SetPassword:
@@ -1822,6 +2140,18 @@ components:
           type: string
         current_password:
           type: string
+      required:
+      - current_password
+      - new_password
+    SetPasswordRequest:
+      type: object
+      properties:
+        new_password:
+          type: string
+          minLength: 1
+        current_password:
+          type: string
+          minLength: 1
       required:
       - current_password
       - new_password
@@ -1840,27 +2170,26 @@ components:
       required:
       - current_password
       - new_username
-    StatusEnum:
-      enum:
-      - pending
-      - paid
-      - failed
-      - cancelled
-      type: string
-      description: |-
-        * `pending` - Pending
-        * `paid` - Paid
-        * `failed` - Failed
-        * `cancelled` - Cancelled
+    SetUsernameRequest:
+      type: object
+      properties:
+        current_password:
+          type: string
+          minLength: 1
+        new_username:
+          type: string
+          minLength: 1
+          title: Username
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+      required:
+      - current_password
+      - new_username
     TokenObtainPair:
       type: object
       properties:
-        username:
-          type: string
-          writeOnly: true
-        password:
-          type: string
-          writeOnly: true
         access:
           type: string
           readOnly: true
@@ -1869,8 +2198,20 @@ components:
           readOnly: true
       required:
       - access
-      - password
       - refresh
+    TokenObtainPairRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+          minLength: 1
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - password
       - username
     TokenRefresh:
       type: object
@@ -1883,12 +2224,21 @@ components:
       required:
       - access
       - refresh
-    TokenVerify:
+    TokenRefreshRequest:
+      type: object
+      properties:
+        refresh:
+          type: string
+          minLength: 1
+      required:
+      - refresh
+    TokenVerifyRequest:
       type: object
       properties:
         token:
           type: string
           writeOnly: true
+          minLength: 1
       required:
       - token
     User:
@@ -1927,16 +2277,46 @@ components:
         id:
           type: integer
           readOnly: true
-        password:
-          type: string
-          writeOnly: true
         re_password:
           type: string
       required:
       - id
+      - re_password
+      - username
+    UserCreatePasswordRetypeRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 254
+        username:
+          type: string
+          minLength: 1
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+        re_password:
+          type: string
+          minLength: 1
+      required:
       - password
       - re_password
       - username
+    UserRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 254
     UsernameResetConfirm:
       type: object
       properties:
@@ -1949,6 +2329,28 @@ components:
           maxLength: 150
       required:
       - new_username
+    UsernameResetConfirmRequest:
+      type: object
+      properties:
+        new_username:
+          type: string
+          minLength: 1
+          title: Username
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+      required:
+      - new_username
+    WishlistItemRequest:
+      type: object
+      description: Serializer for wishlist items.
+      properties:
+        product_id:
+          type: integer
+          writeOnly: true
+      required:
+      - product_id
   securitySchemes:
     jwtAuth:
       type: http

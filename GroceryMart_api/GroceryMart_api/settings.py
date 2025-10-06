@@ -283,16 +283,11 @@ SPECTACULAR_SETTINGS = {
 }
 
 
-# terminal logging settings 
+# Terminal logging settings
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {
-        'file': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'filename': 'debug.log',
-        },
         'console': {
             'level': 'INFO',
             'class': 'logging.StreamHandler',
@@ -300,10 +295,19 @@ LOGGING = {
     },
     'loggers': {
         '': {
-            'handlers': ['file', 'console'],
+            'handlers': ['console'],
             'level': 'INFO',
             'propagate': True,
         },
     },
 }
+
+# Add file handler only if in debug mode (local development)
+if DEBUG:
+    LOGGING['handlers']['file'] = {
+        'level': 'INFO',
+        'class': 'logging.FileHandler',
+        'filename': BASE_DIR / 'debug.log',  # Use absolute path via Path
+    }
+    LOGGING['loggers']['']['handlers'].append('file')
 
