@@ -17,9 +17,9 @@
 
 👉 **Frontend** integration coming soon!  
 
-**🚀Live API:** [grocery-mart-six.vercel.app](grocery-mart-six.vercel.app/)  
-**📚Swagger Docs:** [Swagger UI](grocery-mart-six.vercel.app/api/swagger/)  
-**🎯Redoc Docs:** [Redoc](grocery-mart-six.vercel.app/api/redoc/)  
+**🚀Live API:** [grocery-mart-six.vercel.app](https://grocery-mart-six.vercel.app/)  
+**📚Swagger Docs:** [Swagger UI](https://grocery-mart-six.vercel.app/api/swagger/)  
+**🎯Redoc Docs:** [Redoc](https://grocery-mart-six.vercel.app/api/redoc/)  
 
 ---
 
@@ -77,23 +77,18 @@ To run locally (requires Python 3.12+):
 
 4. Configure `.env` file in the root directory with these example values (replace with your actual credentials):  
    ```env
-   # Django secret key for cryptographic signing (generate a secure key, e.g., via django.core.management.utils.get_random_secret_key())
    SECRET_KEY=your_django_secret_key_here
-
    DJANGO_DEBUG=False
-
-   # Cloudinary credentials for media storage
+   BASE_URL=http://127.0.0.1:8000
+   
    CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
    CLOUDINARY_API_KEY=your_cloudinary_api_key
    CLOUDINARY_API_SECRET=your_cloudinary_api_secret
-
-   BASE_URL=http://127.0.0.1:8000
-
-   # Database configuration (use sqlite for dev, postgresql for prod)
-   DATABASE_ENGINE=sqlite
+   
    # For PostgreSQL, uncomment and set:
+   # DATABASE_ENGINE=postgresql
    # DATABASE_URL=postgres://your_db_user:your_db_password@localhost:5432/grocerymart_db
-
+   
    EMAIL_HOST_USER=your_email@example.com
    EMAIL_HOST_PASSWORD=your_email_app_password
 
