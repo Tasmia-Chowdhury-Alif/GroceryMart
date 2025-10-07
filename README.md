@@ -15,13 +15,25 @@
 ## ⚡ Overview  
 **GroceryMart** API is a scalable, secure backend for an online grocery e-commerce platform, built with **Django REST Framework**. It supports **user authentication**, product management, carts, wishlists, orders, and **integrated payments**, ensuring reliable performance for real-world applications.
 
+## 🚀 Live Demo  
 👉 **Frontend** integration coming soon!  
-
 **🚀Live API:** [grocery-mart-six.vercel.app](https://grocery-mart-six.vercel.app/)  
+
 **📚Swagger Docs:** [Swagger UI](https://grocery-mart-six.vercel.app/api/swagger/)  
 **🎯Redoc Docs:** [Redoc](https://grocery-mart-six.vercel.app/api/redoc/)  
 
----
+
+## 🛠️ Tech Stack
+- **Framework**: Django 5.2, DRF 3.16  
+- **Database**: PostgreSQL (production), SQLite (development)  
+- **Authentication**: Djoser, SimpleJWT  
+- **Payments**: Stripe, SSLCOMMERZ  
+- **Media/Storage**: Cloudinary, Whitenoise  
+- **Utilities**: **MPTT** (Modified Preorder Tree Traversal for category Model), django-filters, django-environ  
+- **Deployment**: Vercel  
+
+Full dependencies listed in [requirements.txt](GroceryMart_api/requirements.txt). 
+
 
 ## ✨ Key Features
 ###  🔐 **Secure Authentication** 
@@ -39,20 +51,6 @@
 ###  🔒 **Best Practices** 
  Implemented coding standards including edge-case handling (e.g., stock overflows, empty carts), idempotency in payments, no N+1 queries, and configurable logging/emails.
 
----
-
-## 🛠️ Tech Stack
-- **Framework**: Django 5.2, DRF 3.16  
-- **Database**: PostgreSQL (production), SQLite (development)  
-- **Authentication**: Djoser, SimpleJWT  
-- **Payments**: Stripe, SSLCOMMERZ  
-- **Media/Storage**: Cloudinary, Whitenoise  
-- **Utilities**: **MPTT** (Modified Preorder Tree Traversal for category Model), django-filters, django-environ  
-- **Deployment**: Vercel  
-
-Full dependencies listed in [requirements.txt](GroceryMart_api/requirements.txt).
-
----
 
 ## ⚙️ Setup Guide
 To run locally (requires Python 3.12+):
@@ -112,28 +110,24 @@ To run locally (requires Python 3.12+):
    python manage.py runserver
    ```
 
-🎉 **Success!** Visit [http://127.0.0.1:8000/api/schema/swagger-ui/](http://127.0.0.1:8000/api/swagger/) to explore the API.
+🎉 **Success!** Visit [http://127.0.0.1:8000/api/swagger/](http://127.0.0.1:8000/api/swagger/) to explore the API.
 
----
 
-## 🚀 Coming Soon
+<!-- ## 🚀 Coming Soon
 - Advanced search with Elasticsearch.  
 - Redis caching and Celery for async tasks like email notifications.  
 - Frontend integration (React-based UI).  
 - Additional features: User analytics, promo codes, delivery tracking.  
-- Deployment enhancements: Docker support.
+- Deployment enhancements: Docker support. -->
 
----
 
 ## 🤝 Contributing
 Contributions are welcome. Fork the repository and submit pull requests. Adhere to PEP8 standards.
 
----
 
 ## 📄 License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
----
 
 ## 👨‍💻 Author
 
