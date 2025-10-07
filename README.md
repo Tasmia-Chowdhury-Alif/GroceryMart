@@ -4,21 +4,29 @@
 
 [![Python](https://img.shields.io/badge/Python-3.12+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/) [![Django](https://img.shields.io/badge/Django-5.2+-092E20?style=for-the-badge&logo=django&logoColor=white)](https://www.djangoproject.com/) [![DRF](https://img.shields.io/badge/DRF-REST-ff1709?style=for-the-badge&logo=django&logoColor=white)](https://www.django-rest-framework.org/)
 <br>
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/) [![Cloudinary](https://img.shields.io/badge/Cloudinary-3448C5?style=for-the-badge&logo=cloudinary&logoColor=white)](https://cloudinary.com/) 
-<br>
-[![SSLCOMMERZ](https://img.shields.io/badge/SSLCOMMERZ-00A651?style=for-the-badge&logo=ssl&logoColor=white)](https://www.sslcommerz.com/) [![Stripe](https://img.shields.io/badge/Stripe-008CDD?style=for-the-badge&logo=stripe&logoColor=white)](https://stripe.com/) 
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/) [![Cloudinary](https://img.shields.io/badge/Cloudinary-3448C5?style=for-the-badge&logo=cloudinary&logoColor=white)](https://cloudinary.com/) [![SSLCOMMERZ](https://img.shields.io/badge/SSLCOMMERZ-00A651?style=for-the-badge&logo=ssl&logoColor=white)](https://www.sslcommerz.com/) [![Stripe](https://img.shields.io/badge/Stripe-008CDD?style=for-the-badge&logo=stripe&logoColor=white)](https://stripe.com/) 
 <br>
 [![Vercel](https://img.shields.io/badge/Deployed-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com/) 
 [![License](https://img.shields.io/badge/License-MIT-FFA500?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](LICENSE)
 </div>
 
+---
 
-GroceryMart API is a scalable, secure backend for an online grocery e-commerce platform, built with Django REST Framework. It supports user authentication, product management, carts, wishlists, orders, and integrated payments, ensuring reliable performance for real-world applications.
+## ⚡ Overview  
+**GroceryMart** API is a scalable, secure backend for an online grocery e-commerce platform, built with **Django REST Framework**. It supports **user authentication**, product management, carts, wishlists, orders, and **integrated payments**, ensuring reliable performance for real-world applications.
+
+👉 **Frontend** integration coming soon!  
+
+**🚀Live API:** [grocery-mart-six.vercel.app](grocery-mart-six.vercel.app/)  
+**📚Swagger Docs:** [Swagger UI](grocery-mart-six.vercel.app/api/swagger/)  
+**🎯Redoc Docs:** [Redoc](grocery-mart-six.vercel.app/api/redoc/)  
+
+---
 
 ## ✨ Key Features
 ###  🔐 **Secure Authentication** 
  JWT-based user login with profiles, email verification, and custom permissions.  
-###  🥦 **Product Catalog** 
+###  📖 **Product Catalog** 
  Hierarchical categories, brands, reviews, advanced filtering, search, and ordering with query optimization to minimize database loads.  
 ###  🛍️ **Cart & Wishlist** 
  Persistent carts with real-time stock validation and atomic updates to prevent race conditions; wishlists for user favorites.  
@@ -31,29 +39,29 @@ GroceryMart API is a scalable, secure backend for an online grocery e-commerce p
 ###  🔒 **Best Practices** 
  Implemented coding standards including edge-case handling (e.g., stock overflows, empty carts), idempotency in payments, no N+1 queries, and configurable logging/emails.
 
+---
+
 ## 🛠️ Tech Stack
 - **Framework**: Django 5.2, DRF 3.16  
 - **Database**: PostgreSQL (production), SQLite (development)  
 - **Authentication**: Djoser, SimpleJWT  
 - **Payments**: Stripe, SSLCOMMERZ  
 - **Media/Storage**: Cloudinary, Whitenoise  
-- **Utilities**: MPTT (categories), django-filters, django-environ  
+- **Utilities**: **MPTT** (Modified Preorder Tree Traversal for category Model), django-filters, django-environ  
 - **Deployment**: Vercel  
 
-Full dependencies listed in [requirements.txt](requirements.txt).
+Full dependencies listed in [requirements.txt](GroceryMart_api/requirements.txt).
 
-## 🌐 Live API Demo
-Access the live API at [https://grocery-mart-six.vercel.app/](https://grocery-mart-six.vercel.app/).  
-Explore endpoints via Swagger: [/api/swagger/](https://grocery-mart-six.vercel.app/api/swagger/).  
-Note: Payments in sandbox mode.
+---
 
 ## ⚙️ Setup Guide
 To run locally (requires Python 3.12+):
 
 1. Clone the repository:  
    ```bash
-   git clone https://github.com/yourusername/grocerymart-api.git
-   cd grocerymart-api
+   git clone https://github.com/Tasmia-Chowdhury-Alif/GroceryMart.git
+   cd GroceryMart
+   cd GroceryMart_api
    ```
 
 2. Create a virtual environment:  
@@ -72,13 +80,7 @@ To run locally (requires Python 3.12+):
    # Django secret key for cryptographic signing (generate a secure key, e.g., via django.core.management.utils.get_random_secret_key())
    SECRET_KEY=your_django_secret_key_here
 
-   # Debug mode (set to False for production)
    DJANGO_DEBUG=False
-
-   DJANGO_ALLOWED_HOSTS=127.0.0.1,.vercel.app
-
-   CORS_ALLOWED_ORIGINS=http://127.0.0.1,http://localhost:3000
-   CSRF_TRUSTED_ORIGINS=http://127.0.0.1,http://localhost:3000,https://sandbox.sslcommerz.com,https://securepay.sslcommerz.com
 
    # Cloudinary credentials for media storage
    CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
@@ -98,7 +100,6 @@ To run locally (requires Python 3.12+):
    SSLC_Store_ID=your_sslcommerz_store_id
    SSLC_Store_Password=your_sslcommerz_store_password
 
-   # Stripe credentials for payment processing
    STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key
    STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_publishable_key
    STRIPE_WEBHOOK_SECRET=whsec_your_stripe_webhook_secret
@@ -115,9 +116,10 @@ To run locally (requires Python 3.12+):
    ```bash
    python manage.py runserver
    ```
-   Access at `http://127.0.0.1:8000/`.
 
-For production, set `DJANGO_DEBUG=False` and use a WSGI server like Gunicorn.
+🎉 **Success!** Visit [http://127.0.0.1:8000/api/schema/swagger-ui/](http://127.0.0.1:8000/api/swagger/) to explore the API.
+
+---
 
 ## 🚀 Coming Soon
 - Advanced search with Elasticsearch.  
@@ -126,11 +128,14 @@ For production, set `DJANGO_DEBUG=False` and use a WSGI server like Gunicorn.
 - Additional features: User analytics, promo codes, delivery tracking.  
 - Deployment enhancements: Docker support.
 
+---
+
 ## 🤝 Contributing
 Contributions are welcome. Fork the repository and submit pull requests. Adhere to PEP8 standards.
 
-## 📄 License
+---
 
+## 📄 License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
